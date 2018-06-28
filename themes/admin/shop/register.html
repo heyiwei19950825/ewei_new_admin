@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="renderer" content="webkit">
+    <title>百檬后台管理系统</title>
+    <link rel="icon" href="__IMAGES__/Untitled.png" />
+    <meta name="keywords" content="百檬+后台管理系统主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="百檬+后台管理系统是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+    <link href="__CSS__/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__STATIC__/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__CSS__/animate.css" rel="stylesheet">
+    <link href="__CSS__/style.css?v=2.2.0" rel="stylesheet">
+    <style>
+        .control-label{
+            color:#fff;
+        }
+        .form-group{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body class="gray-bg" style="background-image: url(__IMAGES__/timg.jpg)">
+<div class="col-lg-6" style="margin-top: 10%;margin-left:  55%">
+    <h3 style="color: #fff; text-align: center">欢迎注册 百檬商户</h3>
+    <form class="form-horizontal ajax-from" style="margin-top: 40px" method="post"  role="form" action="/admin/admin_user/save.html" >
+        <div class="form-group">
+            <label class="col-lg-2 control-label">店铺名称：</label>
+            <div class="col-lg-8">
+                <input type="text" class="form-control" placeholder="店铺名称" required="" name="shop_name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">手机号：</label>
+            <div class="col-lg-8">
+                <input type="text" class="form-control" placeholder="手机号" required="" name="shop_phone">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">密码：</label>
+            <div class="col-lg-8">
+                <input type="password" class="form-control" placeholder="密码" required="" name="password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">确认密码：</label>
+            <div class="col-lg-8">
+                <input type="password" class="form-control" placeholder="请再次输入密码" required="" name="confirm_password">
+            </div>
+        </div>
+        <div style="margin-left: 15%" class="col-lg-12">
+            <div  class="col-lg-3 text-right">
+                <div class="btn btn-primary block full-width m-b submit-btn">注 册</div>
+            </div>
+            <p class="text-muted text-center col-lg-3"><small style="color:#fff">已经有账户了？</small><a href="/admin/login.html" style="color:#0a6aa1">点此登录</a>
+            </p>
+        </div>
+    </form>
+</div>
+<!-- Mainly scripts -->
+<script src="__JS__/jquery-2.1.1.min.js"></script>
+<script src="__JS__/bootstrap.min.js?v=3.4.0"></script>
+<!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+        /**
+         * 通用表单提交(AJAX方式)
+         */
+        $('.submit-btn').on('click', function (data) {
+            var from    = $(this).parents('.ajax-from')[0];
+            var data    = $(this).parents('.ajax-from').serialize();
+            $.ajax({
+                url: from.action,
+                type: from.method,
+                data: data,
+                success: function (info) {
+                    alert(info.msg);
+                    if(info.code == 1 ){
+                        window.location.href = '/admin/login.html';
+                    }else{
+                        window.location.reload();
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>
+
+</html>

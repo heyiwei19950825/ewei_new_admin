@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>小程序配置<small></small></h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal" id="ajax-from"  action="{:url('admin/system/updateSiteConfig')}" method="post">
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span>*</span> 小程序名称</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="x_name" placeholder="网站名称" value="{$site_config.x_name}">
+                            <span class="help-block m-b-none">长度不超过20个字</span>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">小程序LOGO</label>
+                        <div class="col-sm-5">
+                            <img alt="image"  data-path="system" id="upload" class="thumb-img" src="{$site_config.x_logo}" style="width:100px;margin-left:15px;" />
+                            <input type="hidden" name="x_logo" class="theme" value="{$site_config.x_logo}">
+                        </div>
+                    </div>
+
+                    <!--<div class="form-group" style="display: none">-->
+                        <!--<label class="col-sm-2 control-label"><span>*</span>小程序公告</label>-->
+                        <!--{foreach name="$site_config.x_inform" item="vo"}-->
+                        <!--<div class="col-sm-5">-->
+                            <!--<input type="text" class="form-control" name="x_inform[]" placeholder="小程序公告" value="{$vo}">-->
+                            <!--<span class="help-block m-b-none">长度不超过50个字</span>-->
+                        <!--</div>-->
+                        <!--{/foreach}-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span>*</span>小程序域名</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="x_domain" placeholder="小程序域名" value="{$site_config.x_domain}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span>*</span>小程序APPID</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="x_app_id" placeholder="小程序APPID" value="{$site_config.x_app_id}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span>*</span>小程序appSecret</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="x_app_secret" placeholder="小程序appSecret" value="{$site_config.x_app_secret}">
+                        </div>
+                    </div>
+                    <div  class="form-group">
+                        <label class="col-sm-2 control-label">状态</label>
+                        <div class="col-sm-20" >
+                            <div class="radio i-checks" style="display:inline;">
+                                <label>
+                                    <input type="radio" value="1" name="x_switch" {if condition="$site_config.x_switch==1"} checked="checked"{/if}> <i></i>开启</label>
+                            </div>
+                            <div class="radio i-checks"  style="display:inline;">
+                                <label>
+                                    <input type="radio" value="0" name="x_switch"  {if condition="$site_config.x_switch==0"} checked="checked"{/if}> <i></i>关闭</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div  class="form-group">
+                        <label class="col-sm-2 control-label">店铺入住是否需要审核</label>
+                        <div class="col-sm-20" >
+                            <div class="radio i-checks" style="display:inline;">
+                                <label>
+                                    <input type="radio" value="0" name="shop_audit_switch"  {if condition="$site_config.shop_audit_switch==0"} checked="checked"{/if}> <i></i>是</label>
+                            </div>
+                            <div class="radio i-checks"  style="display:inline;">
+                                <label>
+                                    <input type="radio" value="1" name="shop_audit_switch" {if condition="$site_config.shop_audit_switch==1"} checked="checked"{/if}> <i></i>否</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-primary submit-btn" type="submit">保存内容</button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

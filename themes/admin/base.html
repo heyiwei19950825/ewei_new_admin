@@ -1,0 +1,462 @@
+{if $group == 2 }
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>百檬后台管理系统</title>
+    <link href="__CSS__/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__STATIC__/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+    <link href="__CSS__/animate.css" rel="stylesheet">
+    <link href="__CSS__/style.css?v=2.2.0" rel="stylesheet">
+    <link href="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" >
+    <link href="__JS__/plugins/bootstrap-fileinput-master/fileinput.min.css"  rel="stylesheet" >
+    <link href="__JS__/plugins//bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="__JS__/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    {block name="css"}{/block}
+</head>
+<body class="top-navigation">
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="{:url('/admin')}" class="navbar-brand">汇总</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="javascript:">{:session('admin_name')}</a>
+                        </li>
+                        {foreach name="menu" item="vo"}
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="javascript:" class="dropdown-toggle" data-toggle="dropdown"> {$vo.title} <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                {if isset($vo['children'])}
+                                {foreach name="vo['children']" item="ivo"}
+                                <li>
+                                    <a href="{:url($ivo.name)}">{$ivo.title}</a>
+                                </li>
+                                {/foreach}
+                                {/if}
+                            </ul>
+                        </li>
+                        {/foreach}
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-left" style="margin-left:60px;">
+                        <li>
+                            <a   id="myModal5" style="color:red">
+                                收银台
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <span class="m-r-sm text-muted welcome-message"><a href="{:url('/admin')}" title="返回首页"><i class="fa fa-home"></i></a>欢迎使用百檬永久免费收银管理系统</span>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="index.html#" style="color:red">
+                                我的二维码
+                            </a>
+                            <ul class="dropdown-menu dropdown-messages book-msg" style="width:150px;text-align: center">
+                                <li>
+                                    <span>我的店铺二维码</span>
+                                    <img src="__STATIC__/img/wx_logo.jpg" alt="" style="width:100px;">
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="index.html#">
+                                <i class="fa fa-envelope"></i>  <span class="label label-warning book_number">0</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-messages book-msg">
+                            </ul>
+                        </li>
+
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="index.html#">
+                                <i class="fa fa-bell"></i>  <span class="label label-primary feed_book_number">0</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-alerts">
+                                <li>
+                                    <a href="/admin/message/index.html">
+                                        <div>
+                                            <i class="fa fa-envelope fa-fw"></i> 您有<span class="feed_book_number">0</span>条未读消息
+                                            <span class="pull-right text-muted small">刚刚</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <!--<li class="divider"></li>-->
+                                <!--<li>-->
+                                    <!--<a href="profile.html">-->
+                                        <!--<div>-->
+                                            <!--<i class="fa fa-qq fa-fw"></i> 3条新回复-->
+                                            <!--<span class="pull-right text-muted small">12分钟钱</span>-->
+                                        <!--</div>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                                <!--<li class="divider"></li>-->
+                                <!--<li>-->
+                                    <!--<div class="text-center link-block">-->
+                                        <!--<a href="notifications.html">-->
+                                            <!--<strong>查看所有 </strong>-->
+                                            <!--<i class="fa fa-angle-right"></i>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                <!--</li>-->
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="{:url('admin/login/logout')}">
+                                <i class="fa fa-sign-out"></i> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!--主体-->
+        {block name="body"}{/block}
+        <div class="footer">
+            <div>
+                <strong>Copyright</strong> 2015-2017 眉山市坤飞网络科技有限公司 版权所有
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="audio" src="__STATIC__/other/new_message.mp3" ></audio>
+</body>
+<script>
+    // 定义全局JS变量
+    var GV = {
+        current_controller: "admin/{$controller|default=''}/",
+        base_url: "__STATIC__"
+    };
+
+
+</script>
+<script src="__JS__/jquery-2.1.1.min.js"></script>
+<script src="__JS__/bootstrap.min.js?v=3.4.0"></script>
+<script src="__JS__/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+<!-- Peity -->
+<script src="__JS__/plugins/pace/pace.min.js"></script>
+<!-- jQuery UI -->
+<script src="__JS__/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- GITTER -->
+<script src="__JS__/plugins/gritter/jquery.gritter.min.js"></script>
+<!--时间插件-->
+<script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<!--上传插件-->
+<script src="__JS__/plugins/bootstrap-fileinput-master/fileinput.min.js"></script>
+
+<!--下拉框-->
+<script src="__JS__/plugins/bootstrap-select/bootstrap-select.js"></script>
+<script src="__JS__/plugins/bootstrap-select/defaults-zh_CN.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+
+<script src="__JS__/hplus.js?v=2.2.0"></script>
+<script>
+    $(document).ready(function () {
+        WinMove();
+        var msg = [];
+        //定时刷新
+        var  getMessage= function(){
+            $.ajax({
+                url: '/admin/message/message',
+                type: 'post',
+                success: function (info) {
+                    msg = info.data;
+                    $('.feed_book_number').html(msg.feedBook.count);
+                    if(msg.feedBook.count != 0){
+                        setTimeout(function () {
+                            $.gritter.add({
+                                title: '您有'+msg.feedBook.count+'条未读信息',
+                                text: '请前往<a href="/admin/message/index" class="text-warning">消息中心</a>查看用户反馈',
+                                time: 10000
+                            });
+                        }, 2000);
+                    }
+                    if(msg.book.count != 0 ){
+                        $('.book_number').html( msg.book.count);
+                        var audio = $("#audio")[0];
+                        audio.play();
+                        var list = msg.book.list;
+                        var html = ''
+                        $(list).each(function(i,v){
+                            html += '<li> ' +
+                                    '<div class="dropdown-messages-box"> ' +
+                                    '<a href="profile.html" class="pull-left"> ' +
+                                    '<img alt="image" class="img-circle" src="'+v.portrait+'"> ' +
+                                    '</a> ' +
+                                    '<div class="media-body"> ' +
+                                    '<small class="pull-right">刚刚</small> <strong>'+v.username+'</strong> '+v.remark+' <br> <small class="text-muted">'+v.create_time+'</small> </div> </div> </li><li class="divider"></li>'
+                        })
+                        html += ' <li> <div class="text-center link-block"> <a href="/admin/book/order.html"> <i class="fa fa-envelope"></i>  <strong> 查看所有订单</strong> </a> </div> </li>';
+                        $('.book-msg').append(html);
+                    }
+                }
+            });
+        };
+        getMessage();
+        setInterval(function(){
+            getMessage();
+        },60000);
+        layui.use('layer', function() { //独立版的layer无需执行这一句
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+            //收银台弹窗
+            $('#myModal5').on('click', function () {
+                layer.open({
+                    type: 2,
+                    title: '收银台',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: false, //开启最大化最小化按钮
+                    area: ['100%', '100%'],
+                    content: '/admin/cashier/index'
+                });
+            })
+        })
+    });
+</script>
+
+
+{block name="js"}{/block}
+<!--页面JS脚本-->
+{block name="script"}{/block}
+
+</html>
+{else}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="renderer" content="webkit">
+    <title>百檬后台管理系统</title>
+    <link rel="icon" href="__IMAGES__/Untitled.png" />
+    <meta name="keywords" content="百檬后台管理系统主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="百檬后台管理系统是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+    <link href="__CSS__/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__STATIC__/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+    <!-- Morris -->
+    <link href="__CSS__/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <!-- Gritter -->
+    <link href="__JS__/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="__CSS__/animate.css" rel="stylesheet">
+    <link href="__CSS__/style.css?v=2.2.0" rel="stylesheet">
+    <link href="__CSS__/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"  rel="stylesheet">
+    <link href="__JS__/plugins/bootstrap-fileinput-master/fileinput.min.css"  rel="stylesheet" >
+
+    {block name="css"}{/block}
+</head>
+
+<body class="">
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element"> <span>
+                            <img alt="image" class="img-circle" src="{:session('logo')}"  style="width:50px"/>
+                             </span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{:session('admin_name')}</strong>
+                             </span>  <span class="text-muted text-xs block">超级管理员 <b class="caret"></b></span> </span>
+                        </a>
+                        <!--<ul class="dropdown-menu animated fadeInRight m-t-xs">-->
+                            <!--<li><a data-url="{:url('admin/system/clear')}" id="clear-cache">清除缓存</a></li>-->
+                            <!--<li><a href="form_avatar.html">修改头像</a>-->
+                            <!--</li>-->
+                            <!--<li><a href="profile.html">个人资料</a>-->
+                            <!--</li>-->
+                            <!--<li><a href="contacts.html">联系我们</a>-->
+                            <!--</li>-->
+                            <!--<li><a href="mailbox.html">信箱</a>-->
+                            <!--</li>-->
+                            <!--<li class="divider"></li>-->
+                            <!--<li><a href="{:url('admin/login/logout')}">安全退出</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    </div>
+                    <div class="logo-element">
+                        汇总
+                    </div>
+                </li>
+                {foreach name="menu" item="vo"}
+                {if condition="isset($vo['children'])"}
+                <li class="parent-li">
+                    <a href="javascript:;"><i class="{$vo.icon}"></i><span class="nav-label">{$vo.title}</span> <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        {foreach name="vo['children']" item="v"}
+                        <li><a href="{:url($v.name)}">{$v.title}</a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </li>
+                {else /}
+                <li class="layui-nav-item">
+                    <a href="{:url($vo.name)}"><i class="{$vo.icon}"></i> {$vo.title}</a>
+                </li>
+                {/if}
+                {/foreach}
+            </ul>
+        </div>
+    </nav>
+    <div id="page-wrapper" class="gray-bg sidebar-content">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="javascript:"><i class="fa fa-bars"></i> </a>
+                    <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message"><a href="{:url('/admin')}" title="返回首页"><i class="fa fa-home"></i></a>欢迎使用百檬永久免费收银管理系统</span>
+                    </li>
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message"><a href="{:url('/admin/system/clear')}" title="清除缓存"><i class="fa fa-close"></i>清除缓存</a></span>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="index.html#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary message_number">0</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="/admin/message/index">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> 您有<span class="feed_book_number">0</span>条未读消息
+                                        <span class="pull-right text-muted small">刚刚</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/admin/admin_user/index.html">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> 您有<span class="shop_audit">0</span>条商家入住未读消息
+                                        <span class="pull-right text-muted small">刚刚</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="/admin/message/index">
+                                        <strong>查看所有 </strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{:url('admin/login/logout')}">
+                            <i class="fa fa-sign-out"></i> 退出
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!--主体-->
+        {block name="body"}{/block}
+        <div class="footer">
+            <div>
+                <strong>Copyright</strong> 2015-2017 眉山市坤飞网络科技有限公司 版权所有
+            </div>
+        </div>
+    </div>
+</div>
+<audio id="audio" src="__STATIC__/other/Rec 0005.mp3" ></audio>
+</body>
+<script>
+    // 定义全局JS变量
+    var GV = {
+        current_controller: "admin/{$controller|default=''}/",
+        base_url: "__STATIC__"
+    };
+</script>
+<script src="__JS__/jquery-2.1.1.min.js"></script>
+<script src="__JS__/bootstrap.min.js?v=3.4.0"></script>
+<script src="__JS__/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+<!-- Peity -->
+<script src="__JS__/plugins/pace/pace.min.js"></script>
+<!-- jQuery UI -->
+<script src="__JS__/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- GITTER -->
+<script src="__JS__/plugins/gritter/jquery.gritter.min.js"></script>
+<!--时间插件-->
+<script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<!--上传插件-->
+<script src="__JS__/plugins/bootstrap-fileinput-master/fileinput.min.js"></script>
+
+
+<script src="__JS__/plugins/layui/layui.js"></script>
+
+<script src="__JS__/hplus.js?v=2.2.0"></script>
+
+<script>
+    $(document).ready(function () {
+        WinMove();
+        //定时刷新
+        var  getMessage= function(){
+            $.ajax({
+                url: '/admin/message/message',
+                type: 'post',
+                success: function (info) {
+                    var msg = info.data;
+                    $('.feed_book_number').html(msg.feedBook.count);
+                    $('.shop_audit').html(msg.audit.count);
+                    $('.message_number').html(msg.feedBook.count +  msg.audit.count);
+
+                    if(msg.feedBook.count != 0){
+                        var audio = $("#audio")[0];
+                        audio.play();
+                        setTimeout(function () {
+                            $.gritter.add({
+                                title: '您有'+msg.feedBook.count+'条未读信息',
+                                text: '请前往<a href="/admin/message/index" class="text-warning">消息中心</a>查看用户反馈',
+                                time: 10000
+                            });
+                        }, 2000);
+                    }
+                    if(msg.audit.count != 0){
+                        var audio = $("#audio")[0];
+                        audio.play();
+                        setTimeout(function () {
+                            $.gritter.add({
+                                title: '您有'+msg.audit.count+'条未读信息',
+                                text: '请前往<a href="/admin/admin_user/index.html" class="text-warning">商家列表</a>查看待审核商家',
+                                time: 10000
+                            });
+                        }, 2000);
+                    }
+                }
+            });
+        };
+        getMessage();
+        setInterval(function(){
+            getMessage();
+        },60000);
+
+
+    });
+</script>
+{block name="js"}{/block}
+<!--页面JS脚本-->
+{block name="script"}{/block}
+</html>
+{/if}

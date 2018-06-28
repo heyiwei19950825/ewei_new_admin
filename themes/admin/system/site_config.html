@@ -1,0 +1,124 @@
+{extend name="base" /}
+{block name="css"}
+<link href="__JS__/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+<link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+<style>
+	.layui-upload-file{
+		display: none!important;
+	}
+</style>
+{/block}
+{block name="body"}
+<div class="row border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>站点配置</h2>
+		<ol class="breadcrumb">
+		    <li>
+		        <a href="index.html">主页</a>
+		    </li>
+		    <li>
+		        <a>系统配置</a>
+		    </li>
+		    <li>
+		        <strong>站点配置</strong>
+		    </li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+	</div>
+</div>
+<div class="animated fadeIn">
+<div class="row">
+	<div class="ibox">
+	    <div class="ibox-content">
+			<div class="col-lg-30">
+			    <div class="panel blank-panel">
+			        <div class="panel-heading">
+			            <div class="panel-options">
+			                <ul class="nav nav-tabs">
+			                    <!--<li class="active"><a data-toggle="tab" href="tabs_panels.html#tab-1">系统配置</a>-->
+			                    <!--</li>-->
+			                    <!--<li class=""><a data-toggle="tab" href="tabs_panels.html#tab-2">商城配置</a>-->
+			                    <!--</li>-->
+			                    <li class="active"><a data-toggle="tab" href="tabs_panels.html#tab-3">小程序</a>
+			                    </li>
+			                    <!--<li class=""><a data-toggle="tab" href="tabs_panels.html#tab-4">公众号</a>-->
+			                    <!--</li>-->
+			                    <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-5">PC端</a>
+			                    </li>
+			                </ul>
+			            </div>
+			        </div>
+			        <div class="panel-body">
+			            <div class="tab-content">
+			                <!--<div id="tab-1" class="tab-pane active">-->
+			                <!--{include file="system/site_config_system" /}-->
+			                <!--</div>-->
+			                <!--<div id="tab-2" class="tab-pane">-->
+			                 <!--{include file="system/site_config_shop" /}-->
+			                <!--</div>-->
+			                <div id="tab-3" class="tab-pane active">
+			                 {include file="system/site_config_x_wechat" /}
+			                </div>
+			                <!--<div id="tab-4" class="tab-pane">-->
+			                 <!--{include file="system/site_config_wechat" /}-->
+			                <!--</div>-->
+			                <div id="tab-5" class="tab-pane">
+			                 {include file="system/site_config_pc" /}
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/plugins/fancybox/jquery.fancybox.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+<!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+{/block}
+
+{block name="script"}
+<script>
+	$(document).ready(function () {
+		//上传
+		layui.use('upload', function(){
+			var upload = layui.upload;
+			//执行实例
+			var uploadInst = upload.render({
+				elem: '#upload', //绑定元素
+				url: "/api/upload/upload",
+				type: 'image',
+				ext: 'jpg|png|gif|bmp',
+				size: 200, //最大允许上传的文件大小
+				data:{
+					width:$('#upload').attr('data-width'),
+					height:$('#upload').attr('data-height'),
+					file_path:$('#upload').attr('data-path')
+				},
+				done: function (data) {
+					console.log(data);
+					if (data.error === 0) {
+						$('.thumb-img').attr('src',data.url);
+						$('.thumb-a').attr('href',data.url);
+						$('.theme').val(data.url);
+					} else {
+						alert(data.message);
+					}
+				}
+			});
+		});
+
+		//单选
+		$('.i-checks').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+		});
+
+	});
+</script>
+{/block}

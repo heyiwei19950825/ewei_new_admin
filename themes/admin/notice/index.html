@@ -1,0 +1,118 @@
+{extend name="base" /}
+{block name="body"}
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h3>公告列表</h3>
+                    <p class="small"><i class="fa fa-hand-o-up"></i> 每段公告字数不要超过30个字</p>
+                    <div class="input-group">
+                        <input type="text" placeholder="添加新公告" class="input input-sm form-control notice_param">
+                        <span class="input-group-btn">
+                                <button type="button" class="btn btn-sm btn-white add_notice"> <i class="fa fa-plus"></i> 添加</button>
+                        </span>
+                    </div>
+
+                    <ul class="sortable-list connectList agile-list ui-sortable">
+                        {foreach name="notice" item="vo"}
+                        <li class="info-element">
+                            {$vo.notice}
+                            <div class="agile-detail">
+                                <a href="#" class="pull-right btn btn-xs btn-danger delete_notice" style="margin-left: 10px;" data-id="{$vo.id}">删除</a>
+                                <a href="#" class="pull-right btn btn-xs stop_notice btn-warning update_btn" data-id="{$vo.id}" data-status="{$vo.status}">
+                                    {if $vo.status == 1}
+                                        停用
+                                    {else}
+                                        开启
+                                    {/if}
+                                </a>
+                                <i class="fa fa-clock-o"></i> 创建时间：{$vo.add_time}
+                            </div>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{/block}
+{block name="js"}
+{/block}
+{block name="script"}
+<script>
+    $(function(){
+        //添加公告信息
+        $('.add_notice').on('click',function(){
+            var notice = $('.notice_param').val();
+            if( notice == ''){
+                alert('请填写公告内容');return false;
+            }
+            $.post('/admin/notice/addNotice',{
+                notice:notice
+            },function(e){
+                if(e.code == 1 ){
+                    var html = '<li class="info-element">'+notice+' <div class="agile-detail"> ' +
+                            '<a href="#" class="pull-right btn btn-xs btn-danger delete_notice" style="margin-left: 10px;" data-id="'+e.data+'">删除</a> <a href="#" class="pull-right btn btn-xs stop_notice btn-warning update_btn" data-status="1" data-id="'+e.data+'">停用</a> ' +
+                            '<i class="fa fa-clock-o"></i>创建时间：{:date("Y-m- H:i:s",time())} </div> </li>';
+                    $('.ui-sortable').append(html);
+                    delNotice();
+                    updateNotice();
+                }else{
+                    alert(e.msg);
+                }
+            })
+        });
+
+        //删除公告
+        var delNotice = function(){
+            $('.delete_notice').on('click',function(){
+                var that =  $(this);
+                $.post('/admin/notice/delNotice',{
+                    id:$(this).attr('data-id')
+                },function(e){
+                    if(e.code == 1){
+                        that.parents('.info-element').remove();
+                    }else{
+                        alert(e.msg);
+                    }
+                })
+            })
+        }
+        //修改公告状态
+        var updateNotice = function(){
+            $('.update_btn').on('click',function(){
+                var that = $(this);
+                $.post('/admin/notice/updateNotice',{
+                    id:$(this).attr('data-id'),
+                    status:$(this).attr('data-status')
+                },function(e){
+                    if(e.code == 1){
+                        if(that.attr('data-status') == 1){
+                            that.html('开启');
+                            that.attr('data-status',0);
+                            that.addClass('btn-primary');
+                            that.removeClass('btn-warning');
+                            that.attr('data-status')
+                        }else{
+                            that.html('停用');
+                            that.removeClass('btn-primary');
+                            that.addClass('btn-warning');
+                            that.attr('data-status',1);
+                        }
+                    }else{
+                        alert(e.msg);
+                    }
+                })
+            })
+        }
+
+        delNotice();
+        updateNotice();
+    })
+
+</script>
+{/block}

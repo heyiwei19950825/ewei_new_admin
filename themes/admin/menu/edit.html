@@ -1,0 +1,174 @@
+{extend name="base" /}
+{block name="css"}
+    <link href="__JS__/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+
+{/block}
+{block name="body"}
+<style>
+    .layui-upload-file{
+        display: none!important;
+    }
+</style>
+<div class="row border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>导航管理</h2>
+		<ol class="breadcrumb">
+		    <li>
+		        <a href="index.html">主页</a>
+		    </li>
+		    <li>
+		        <a>菜单管理</a>
+		    </li>
+            <li>
+                <a>导航管理</a>
+            </li>
+		    <li>
+		        <strong>编辑导航</strong>
+		    </li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+	</div>
+</div>
+<div class="animated fadeInRight">
+	<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>首页菜单列表<small></small></h5>
+                </div>
+                 <div class="ibox-content">
+                    <form class="form-horizontal" id="ajax-from"  action="{:url('admin/menu/update')}" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">上级导航</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="pid">
+                                   <option value="0">一级导航</option>
+                                {foreach name="admin_menu_level_list" item="vo"}
+                                <option value="{$vo.id}" {if condition="$admin_menu.id==$vo.id"} disabled="disabled"{/if} {if condition="$admin_menu.pid==$vo.id"} selected="selected"{/if}>{neq name="vo.level" value="1"}|{php}for($i=1;$i<$vo['level'];$i++){echo ' ----';}{/php}{/neq} {$vo.title}</option>
+                                {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 菜单名称</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="title" value="{$admin_menu.title}"  placeholder="请输入菜单名称">
+                                <span class="help-block m-b-none">长度不超过5个字</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">控制器方法</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="name" value="{$admin_menu.name}" placeholder="请输入控制器方法 如：admin/Index/index">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">图标</label>
+                             <div class="col-sm-5">
+                              <input type="text" name="icon" value="{$admin_menu.icon}" placeholder="（选填）如：fa fa-home" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">模块组</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="plug_in">
+                                    {foreach name="module_list" item="vo"}
+                                    <option value="{$vo.id}"  {if condition="$admin_menu.plug_in==$vo.id"} selected="selected"{/if}  >{$vo.module_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">排序</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" name="sort" value="{$admin_menu.sort}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div  class="form-group">
+                            <label class="col-sm-2 control-label">首页显示</label>
+                            <div class="col-sm-20" >
+                                <div class="radio i-checks" style="display:inline;">
+                                    <label>
+                                    <input type="radio" value="1" name="status" {if condition="$admin_menu.status==1"} checked="checked"{/if}> <i></i>显示</label>
+                                </div>
+                                <div class="radio i-checks"  style="display:inline;">
+                                    <label>
+                                    <input type="radio" value="0" name="status" {if condition="$admin_menu.status==0"} checked="checked"{/if}> <i></i>隐藏</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input type="hidden" name="id" value="{$admin_menu.id}">
+                                <button class="btn btn-primary submit-btn" type="submit">保存内容</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/plugins/fancybox/jquery.fancybox.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+ <!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+{/block}
+{block name="script"}
+ <script>
+    $(document).ready(function () {
+        //图片
+        $('.fancybox').fancybox({
+            openEffect: 'none',
+            closeEffect: 'none'
+        });
+
+        //上传
+        layui.use('upload', function(){
+          var upload = layui.upload;
+          //执行实例
+          var uploadInst = upload.render({
+            elem: '#upload', //绑定元素
+            url: "/index.php/api/upload/upload",
+            type: 'image',
+            ext: 'jpg|png|gif|bmp',
+            size: 200, //最大允许上传的文件大小
+            data:{
+                width:$('#upload').attr('data-width'),
+                height:$('#upload').attr('data-height'),
+                file_path:$('#upload').attr('data-path')
+            },
+            done: function (data) {
+                console.log(data);
+                if (data.error === 0) {
+                    $('.thumb-img').attr('src',data.url);
+                    $('.thumb-a').attr('href',data.url);
+                    $('.theme').val(data.url);
+                } else {
+                    alert(data.message);
+                }
+            }
+          });
+        });
+
+        //单选
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    
+    });
+</script>
+{/block}

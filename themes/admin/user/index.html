@@ -1,0 +1,299 @@
+{extend name="base" /}
+{block name="body"}
+<style>
+    .layui-upload-file{
+        display: none!important;
+    }
+
+</style>
+<div class="row border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>普通用户管理</h2>
+		<ol class="breadcrumb">
+		    <li>
+		        <a href="index.html">主页</a>
+		    </li>
+		    <li>
+		        <a>用户管理</a>
+		    </li>
+		    <li>
+		        <strong>普通用户管理</strong>
+		    </li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+	</div>
+</div>
+<div class="animated fadeInRight">
+<div class="row">
+    <div class="ibox">
+        <div class="ibox-content">
+            <div class="col-lg-30">
+                <div class="panel blank-panel">
+                    <div class="panel-heading">
+                        <div class="panel-options">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="tabs_panels.html#tab-1">会员</a>
+                                </li>
+                                <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-2">普通用户</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="ibox float-e-margins">
+                                            <!--<div class="ibox-title">-->
+                                                <!--<a class="btn btn-danger dim" type="button">-->
+                                                    <!--用户数据导入-->
+                                                <!--</a>-->
+                                                <!--<a class="btn btn-danger dim" type="button">-->
+                                                    <!--用户数据导出-->
+                                                <!--</a>-->
+                                            <!--</div>-->
+                                            <div class="ibox-content">
+                                                <div class="">
+                                                </div>
+                                                <table class="table table-striped table-bordered table-hover" id="Member">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 30px;">ID</th>
+                                                            <th>手机</th>
+                                                            <th>用户名</th>
+                                                            <th>性别</th>
+                                                            <th>生日</th>
+                                                            <th>注册时间</th>
+                                                            <th>卡号</th>
+                                                            <th>卡类型</th>
+                                                            <th>余额</th>
+                                                            <th>积分</th>
+                                                            <th>状态</th>
+                                                            <th>有效期</th>
+                                                            <th>操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {foreach name="member_list" item="vo"}
+                                                         <tr>
+                                                            <td>{$vo.id}</td>
+                                                            <td>{$vo.mobile}</td>
+                                                            <td>{$vo.username}</td>
+                                                            <td>{php}echo $vo['sex']==1 ? '男' : '女';{/php}</td>
+                                                            <td>{$vo.birthday}</td>
+                                                            <td>{$vo.create_time}</td>
+                                                            <td>{$vo.uni_id}</td>
+                                                            <td>{$vo.name}</td>
+                                                            <td>{$vo.balance}</td>
+                                                            <td>{$vo.integral}</td>
+                                                            <td>{php}echo $vo['status']==1 ? '开启' : '禁用';{/php}</td>
+                                                            <td>{$vo.validity_time}</td>
+                                                            <td class="center col-sm-2">
+                                                                <div type="button" class="btn btn-primary user-dill-btn" data-id="{$vo.id}">账单</div>
+                                                                <a type="button" class="btn btn-info" href="{:url('admin/user/edit',['id'=>$vo['id']])}" >编辑</a>
+                                                                <!--<a type="button" class="btn btn-danger" href="{:url('admin/user/delete',['id'=>$vo['id']])}">退卡</a>-->
+                                                            </td>
+                                                        </tr>
+                                                    {/foreach}
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <!--<a class="btn btn-danger dim" type="button">-->
+                                                    <!--删除-->
+                                                <!--</a>-->
+                                            </div>
+                                            <div class="ibox-content">
+                                                <div class="">
+                                                </div>
+                                                <table class="table table-striped table-bordered table-hover" id="User">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 30px;">ID</th>
+                                                            <th>手机</th>
+                                                            <th>用户名</th>
+                                                            <th>性别</th>
+                                                            <th>生日</th>
+                                                            <th>注册时间</th>
+                                                            <th>状态</th>
+                                                            <th>操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {foreach name="user_list" item="vo"}
+                                                         <tr>
+                                                            <td>{$vo.id}</td>
+                                                            <td>{$vo.mobile}</td>
+                                                            <td>{$vo.username}</td>
+                                                            <td>{php}echo $vo['sex']==1 ? '男' : '女';{/php}</td>
+                                                            <td>{$vo.birthday}</td>
+                                                            <td>{$vo.create_time}</td>
+                                                            <td>{php}echo $vo['status']==1 ? '开启' : '禁用';{/php}</td>
+                                                            <td class="center col-sm-2">
+                                                                <button type="button" class="btn btn-primary open-card" data-toggle="modal" data-target="#myModal4" data-id="{$vo['id']}" >开卡</button>
+                                                                <a type="button" class="btn btn-info" href="{:url('admin/user/edit',['id'=>$vo['id']])}">编辑</a>
+                                                                <a type="button" class="btn btn-danger" href="{:url('admin/user/delete',['id'=>$vo['id']])}">删除</a>
+                                                            </td>
+                                                        </tr>
+                                                    {/foreach}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--开卡拟态弹窗-->
+<div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-diamond modal-icon"></i>
+                <h4 class="modal-title">会员开卡</h4>
+            </div>
+            <div class="modal-body">
+                <p><strong>会员规则</strong></br> 根据办理的不同级别的会员卡可以享受到不同的折扣，更有许多会员专享活动</p>
+                <div class="form-group"><label>卡类型</label>
+                    <select class="form-control m-b" name="rank">
+                        {foreach name="rank_list" item="vo"}
+                        <option value="{$vo.id}"> {$vo.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="form-group"><label>充值金额</label>
+                    <div class="input-group m-b">
+                        <input type="number" class="form-control" name="money" value="0">
+                        <span class="input-group-addon">元</span>
+                    </div>
+                </div>
+                <div class="form-group"><label>赠送金额</label>
+                    <div class="input-group m-b">
+                        <input type="number" class="form-control" name="give_money" value="0">
+                        <span class="input-group-addon">元</span>
+                    </div>
+                </div>
+                <div class="form-group"><label>赠送积分</label>
+                    <div class="input-group m-b">
+                        <input type="number" class="form-control" name="give_integral" value="0">
+                        <span class="input-group-addon">积分</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><span>*</span> 有效期</label>
+                        <input id="date" class=" form-control layer-date required date" name="validity_time" >
+                </div>
+                <div class="form-group"><label>备注</label>
+                        <input type="text" class="form-control" name="remark" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary voucher"  data-id="0">结算</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}
+{block name="js"}
+<!-- Data Tables -->
+<link rel="stylesheet" href="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/bootstrap/3/dataTables.bootstrap.css">
+    <script src="__JS__/plugins/dataTables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.flash.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.html5.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.print.js"></script>
+<script src="__JS__/plugins/dataTables/dataTables.bootstrap.js"></script>
+
+<script src="__JS__/page/user.js"></script>
+{/block}
+{block name="script"}
+<script>
+    $(document).ready(function () {
+        $.extend(true, $.fn.dataTable.defaults, {
+            "dom": "<'row'<'col-md-6'l<'#toolbar'>><'col-md-6'f>r>" +
+            "t" +
+            "<'row'<'col-md-5 sm-center'i><'col-md-7 text-right sm-center'p>>"
+        });
+        //初始化
+        $('#Member').dataTable({
+            order: [[ 0, "desc" ]],
+            dom: 'Bfrtip',
+            "buttons": [
+                {
+                    'extend': 'excel',
+                    'text': '导出',//定义导出excel按钮的文字
+                    'exportOptions': {
+                        'modifier': {
+                            'page': 'current'
+                        }
+                    }
+                }
+            ],
+            "language": {
+                "lengthMenu": "_MENU_ 条记录每页",
+                "zeroRecords": "没有找到记录",
+                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)",
+                "paginate": {
+                    "previous": "上一页",
+                    "next": "下一页"
+                }
+            },
+            "dom": "<'row'<'col-xs-2'l><'#mytool.col-xs-4'><'col-xs-6'f>r>" +
+            "t" +
+            "<'row'<'col-xs-6'i><'col-xs-6'p>>",
+            initComplete: function () {
+                $("#mytool").append(' <form enctype="multipart/form-data" class="row" method="post" id="form-admin-role-add" action="/admin/user/into"> ' +
+                        '<div class="form-group col-sm-8"> <input type="file" name="file_stu" overflow="hidden" /> </div> <div class="form-group col-sm-2"> ' +
+                        '<input type="submit" value="导入" class="btn btn-w-m btn-primary col-sm-2" /> </div> <span class="col-sm-3"><a href="/public/static/example/用户数据导入示例.xlsx">导入示例下载</a></span></form>' +
+                        '');
+
+            }
+        });
+
+        $('#User').dataTable();
+
+        //查看账单
+        $('#Member').on('click','.user-dill-btn',function(){
+            console.log($(this));
+            var id = $(this).attr('data-id');
+            var url = '/admin/user/bill?id='+id;
+            layer.open({
+                type: 2,
+                title: '用户账单',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['40%', '90%'],
+                content: url
+            });
+        })
+    });
+</script>
+{/block}

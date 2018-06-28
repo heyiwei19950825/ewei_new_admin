@@ -1,0 +1,240 @@
+{extend name="base" /}
+{block name="css"}
+<link href="__JS__/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+<link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+
+{/block}
+{block name="body"}
+<style>
+    .layui-upload-file{
+        display: none!important;
+    }
+    .remove-photo-btn {
+        width: 100%;
+        bottom: 1px;
+        color:#000;
+        background:red;
+        opacity:0.5;
+    }
+</style>
+<div class="row border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>商品分类管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <a>商品&服务</a>
+            </li>
+            <li>
+                <a>商品分类管理</a>
+            </li>
+            <li>
+                <strong>商品分类添加</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>商品分类添加<small></small></h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" id="ajax-from"  action="{:url('admin/goodsCategory/update')}" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">上级导航</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="pid">
+                                    <option value="0">一级菜单</option>
+                                    {foreach name="category_list" item="vo"}
+                                    <option value="{$vo.id}" {if condition="$category.pid==$vo.id"} selected="selected"{/if}>{neq name="vo.level" value="1"}|{php}for($i=1;$i<$vo['level'];$i++){echo ' ----';}{/php}{/neq} {$vo.name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 分类名称</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="name" value="{$category.name}">
+                                <span class="help-block m-b-none">长度不超过5个字</span>
+                            </div>
+                        </div>
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label"><span>*</span> 分类别名</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<input type="text" class="form-control" name="alias">-->
+                        <!--<span class="help-block m-b-none">长度不超过5个字</span>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">分类图标</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<img alt="image"  data-path="goods_category" id="upload" class="thumb-img demoMore" src="__IMAGES__/default_thumb.png" style="width:100px;margin-left:15px;" />-->
+                        <!--<input type="hidden" name="portrait" class="theme" value="">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">分类广告图</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<button type="button" id="upload-photo-btn" class="btn btn-primary">上传图集</button>-->
+                        <!--<div id="photo-container" style="margin-top:20px;"></div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">分类列表模板</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<input type="text" name="thumb" value="" placeholder="（选填）如：fa fa-home" class="form-control">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">分类详情模板</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<input type="text" name="detail_template" value="" placeholder="（选填）如：fa fa-home" class="form-control">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div  class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">分类类型</label>-->
+                        <!--<div class="col-sm-20" >-->
+                        <!--<div class="radio i-checks" style="display:inline;">-->
+                        <!--<label>-->
+                        <!--<input type="radio" value="1" name="type" checked> <i></i>列表</label>-->
+                        <!--</div>-->
+                        <!--<div class="radio i-checks"  style="display:inline;">-->
+                        <!--<label>-->
+                        <!--<input type="radio" value="2" name="type"> <i></i>单页</label>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">分类描述</label>-->
+                        <!--<div class="col-sm-5">-->
+                        <!--<textarea name="description" placeholder="" class="" id="content" style="height:200px;"></textarea>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">排序</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" name="sort" value="{$category.sort}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div  class="form-group">
+                            <label class="col-sm-2 control-label">状态</label>
+                            <div class="col-sm-20" >
+                                <div class="radio i-checks" style="display:inline;">
+                                    <label>
+                                        <input type="radio" value="1" name="is_hide" {if condition="$category.is_hide==1"} checked="checked"{/if}> <i></i>显示</label>
+                                </div>
+                                <div class="radio i-checks"  style="display:inline;">
+                                    <label>
+                                        <input type="radio" value="0" name="is_hide" {if condition="$category.is_hide==1"} checked="checked"{/if}> <i></i>隐藏</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input type="hidden" name="id" value="{$category.id}">
+                                <button class="btn btn-primary submit-btn" type="submit">保存内容</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/plugins/fancybox/jquery.fancybox.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+<!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<!--//富文本-->
+<script src="__JS__/ueditor/ueditor.config.js"></script>
+<script src="__JS__/ueditor/ueditor.all.min.js"></script>
+{/block}
+{block name="script"}
+<script>
+    $(document).ready(function () {
+        var ue = UE.getEditor('content'),
+                uploadEditor = UE.getEditor('upload-photo-btn'),
+                photoListItem,
+                uploadImage;
+
+        uploadEditor.ready(function () {
+            uploadEditor.setDisabled();
+            uploadEditor.hide();
+            uploadEditor.addListener('beforeInsertImage', function (t, arg) {
+                $.each(arg, function (index, item) {
+                    photoListItem = '<div class="photo-list layui-inline col-sm-3" style="margin-left: 20px;"><input type="hidden" name="photo[]" value="' + item.src + '" class="layui-input layui-input-inline"><img width="100%" src="' + item.src + '">';
+                    photoListItem += '<div class="layui-btn-danger remove-photo-btn" style="text-align: center">移除</div></div>';
+                    $('#photo-container').append(photoListItem).on('click', '.remove-photo-btn', function () {
+                        $(this).parent('.photo-list').remove();
+                    });
+                });
+            });
+        });
+
+        $('#upload-photo-btn').on('click', function () {
+            uploadImage = uploadEditor.getDialog("insertimage");
+            uploadImage.open();
+        });
+
+        //删除图集中的图片
+        $('.remove-photo-btn').on('click',function(){
+            $(this).parent('.photo-list').remove();
+        })
+
+
+        //上传
+        layui.use('upload', function(){
+            var upload = layui.upload;
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#upload', //绑定元素
+                url: "/index.php/api/upload/upload",
+                type: 'image',
+                ext: 'jpg|png|gif|bmp',
+                size: 200, //最大允许上传的文件大小
+                data:{
+                    width:$('#upload').attr('data-width'),
+                    height:$('#upload').attr('data-height'),
+                    file_path:$('#upload').attr('data-path')
+                },
+                done: function (data) {
+                    console.log(data);
+                    if (data.error === 0) {
+                        $('.thumb-img').attr('src',data.url);
+                        $('.thumb-a').attr('href',data.url);
+                        $('.theme').val(data.url);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+
+        //单选
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+    });
+</script>
+{/block}

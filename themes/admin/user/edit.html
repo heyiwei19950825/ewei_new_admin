@@ -1,0 +1,167 @@
+{extend name="base" /}
+{block name="css"}
+    <link href="__JS__/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+
+{/block}
+{block name="body"}
+<style>
+    .layui-upload-file{
+        display: none!important;
+    }
+</style>
+<div class="row border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>添加用户</h2>
+		<ol class="breadcrumb">
+		    <li>
+		        <a href="index.html">主页</a>
+		    </li>
+		    <li>
+		        <a>菜单管理</a>
+		    </li>
+            <li>
+                <a>用户管理</a>
+            </li>
+		    <li>
+		        <strong>添加用户</strong>
+		    </li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+	</div>
+</div>
+<div class="animated fadeInRight">
+	<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>创建新用户<small></small></h5>
+                </div>
+                 <div class="ibox-content">
+                    <form class="form-horizontal" id="ajax-from"  action="{:url('admin/user/update')}" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">头像</label>
+                            <div class="col-sm-20" >
+                                    <img alt="image"  data-path="user" id="upload" class="thumb-img demoMore" src="{$user.portrait}" style="width:100px;margin-left:15px;" />
+                                    <input type="hidden" name="portrait" class="theme" value="{$user.portrait}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 手机号</label>
+                            <div class="col-sm-5">
+                                <input type="number" class="form-control required" name="mobile" value="{$user.mobile}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 姓名</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control required" name="username" value="{$user.username}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 密码</label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control required" name="password" value="{$user.password}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div  class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span>性别</label>
+                            <div class="col-sm-20" >
+                                <div class="radio i-checks" style="display:inline;">
+                                    <label>
+                                    <input type="radio"value="1" name="sex" {if condition="$user.sex=='1'"}checked="checked"{/if}> <i></i>男</label>
+                                </div>
+                                <div class="radio i-checks"  style="display:inline;">
+                                    <label>
+                                    <input type="radio" value="0" name="sex" {if condition="$user.sex=='0'"}checked="checked"{/if}> <i></i>女</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 出生年月</label>
+                            <div class="col-sm-5">
+                                <input class="form-control required date" name="birthday" style="height: 30px;    line-height: 30px;" value="{$user.birthday}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 客户来源</label>
+                            <div class="col-sm-5">
+                                <select name="guest_way" id="" class="form-control required">
+                                    <option value="1" {if condition="1==$user.guest_way"}selected="selected"{/if}>老带新</option>
+                                    <option value="2" {if condition="2==$user.guest_way"}selected="selected"{/if}>朋友介绍</option>
+                                    <option value="3" {if condition="3==$user.guest_way"}selected="selected"{/if}>员工推销</option>
+                                </select>
+                            </div>
+                        </div>
+                        {if $user.rank_id != 0}
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span>卡类型</label>
+                                <div class="col-sm-5">
+                                <select class="form-control m-b" name="rank_id">
+                                    {foreach name="rank_list" item="vo"}
+                                    <option value="{$vo.id}" {if condition="$user.rank_id==$vo.id"}  selected="selected"{/if}> {$vo.name}</option>
+                                    {/foreach}
+                                </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 有效期</label>
+                                <div class="col-sm-5">
+                                    <input class=" form-control date" name="validity_time" style="height: 30px;    line-height: 30px;" value="{$user.validity_time}">
+                                </div>
+                            </div>
+                        {/if}
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> 备注</label>
+                            <div class="col-sm-5">
+                                <textarea class="form-control" name="remarks">{$user.remarks}</textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input type="hidden" name="id" value="{$user.id}">
+                                <button class="btn btn-primary submit-btn" type="submit">保存内容</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/plugins/fancybox/jquery.fancybox.js"></script>
+<!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+
+<script src="__JS__/page/user.js"></script>
+{/block}
+{block name="script"}
+<script>
+    $(document).ready(function () {
+        //单选
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+
+
+    });
+</script>
+{/block}

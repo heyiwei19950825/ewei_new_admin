@@ -1,0 +1,185 @@
+{extend name="base" /}
+{block name="css"}
+<link href="__JS__/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+<link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+
+{/block}
+{block name="body"}
+<style>
+    .layui-upload-file{
+        display: none!important;
+    }
+</style>
+<div class="row border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>添加用户</h2>
+		<ol class="breadcrumb">
+		    <li>
+		        <a href="index.html">主页</a>
+		    </li>
+		    <li>
+		        <a>菜单管理</a>
+		    </li>
+            <li>
+                <a>用户管理</a>
+            </li>
+		    <li>
+		        <strong>添加用户</strong>
+		    </li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+	</div>
+</div>
+<div class="animated fadeInRight">
+	<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>创建新用户<small></small></h5>
+                </div>
+                 <div class="ibox-content">
+                    <form class="form-horizontal" id="ajax-from"  action="{:url('admin/user/save')}" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">头像</label>
+                            <div class="col-sm-5" >
+                                <img alt="image"  data-path="user" id="upload" class="thumb-img demoMore" src="__IMAGES__/default_thumb.png" style="width:100px;margin-left:15px;" />
+                                <input type="hidden" name="portrait" class="theme" value="">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 手机号</label>
+                            <div class="col-sm-5">
+                                <input type="number" class="form-control required" name="mobile" >
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 姓名</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control required" name="username">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 密码</label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control required" name="password">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 确认密码</label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control required" name="confirm_password">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div  class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span>性别</label>
+                            <div class="col-sm-20" >
+                                <div class="radio i-checks" style="display:inline;">
+                                    <label>
+                                    <input type="radio" checked value="1" name="sex"> <i></i>男</label>
+                                </div>
+                                <div class="radio i-checks"  style="display:inline;">
+                                    <label>
+                                    <input type="radio" value="0" name="sex"> <i></i>女</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 出生年月</label>
+                            <div class="col-sm-5">
+                                <input class=" form-control required date" name="birthday" style="height: 30px;    line-height: 30px;">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 客户来源</label>
+                            <div class="col-sm-5">
+                                <select name="guest_way" id="" class="form-control required">
+                                    <option value="1">老带新</option>
+                                    <option value="2">朋友介绍</option>
+                                    <option value="3">员工推销</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> 备注</label>
+                            <div class="col-sm-5">
+                                <textarea class="form-control" name="remarks"></textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary submit-btn" type="submit">保存内容</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/plugins/fancybox/jquery.fancybox.js"></script>
+<!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<script src="__JS__/page/user.js"></script>
+
+
+<!--<script src="__JS__/ueditor/ueditor.config.js"></script>-->
+<!--<script src="__JS__/ueditor/ueditor.all.min.js"></script>-->
+{/block}
+<script src="__JS__/page/user.js"></script>
+{/block}
+{block name="script"}
+<script>
+    $(document).ready(function () {
+
+        //单选
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+//        var uploadEditor = UE.getEditor("uploadEditor", {
+//                    isShow: false,
+//                    focus: false,
+//                    enableAutoSave: false,
+//                    autoSyncData: false,
+//                    autoFloatEnabled:false,
+//                    wordCount: false,
+//                    sourceEditor: null,
+//                    scaleEnabled:true,
+//                    toolbars: [["insertimage", "attachment"]]
+//                }),
+//                photoListItem
+//
+//
+//        $('.j_upload_img_btn').on('click',function(){
+//            var dialog = uploadEditor.getDialog("insertimage");
+//            dialog.title = '多图上传';
+//            dialog.render();
+//            dialog.open();
+//            uploadEditor.addListener('beforeInsertImage', function (t, arg) {
+//                $.each(arg, function (index, item) {
+//                    photoListItem = '<div class="photo-list"><input type="text" name="photo[]" value="' + item.src + '" class="layui-input layui-input-inline">';
+//                    photoListItem += '<button type="button" class="layui-btn layui-btn-danger remove-photo-btn">移除</button></div>';
+//                    $('.j_upload_img_btn').append(photoListItem).on('click', '.remove-photo-btn', function () {
+//                        $(this).parent('.photo-list').remove();
+//                    });
+//                });
+//            });
+//        });
+
+    });
+</script>
+{/block}

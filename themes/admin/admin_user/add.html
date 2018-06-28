@@ -1,0 +1,172 @@
+{extend name="base" /}
+{block name="css"}
+    <link href="__JS__/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+
+{/block}
+{block name="body"}
+<style>
+    .layui-upload-file{
+        display: none!important;
+    }
+</style>
+<div class="row border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>添加管理</h2>
+		<ol class="breadcrumb">
+		    <li>
+		        <a href="index.html">主页</a>
+		    </li>
+		    <li>
+		        <a>菜单管理</a>
+		    </li>
+            <li>
+                <a>用户管理</a>
+            </li>
+		    <li>
+		        <strong>添加管理</strong>
+		    </li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
+	</div>
+</div>
+<div class="animated fadeInRight">
+    <form class="form-horizontal" id="ajax-from"  action="{:url('admin/admin_user/save')}" method="post">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>创建管理<small></small></h5>
+                    </div>
+                     <div class="ibox-content">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">店铺logo</label>
+                                <div class="col-sm-20" >
+                                        <img alt="image"  data-path="shop" id="upload" class="thumb-img" src="__IMAGES__/default_thumb.png" style="width:100px;margin-left:15px;" />
+                                        <input type="hidden" name="shop_logo" class="theme">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 店长</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control required" name="shop_shopowner" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 店铺名称</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control required" name="shop_name">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 手机号</label>
+                                <div class="col-sm-5">
+                                    <input type="number" class="form-control required" name="shop_phone" >
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 账户</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control required" name="account" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 密码</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control required" name="password">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 确认密码</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control required" name="confirm_password">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span>*</span> 地址</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control required" name="live_store_address" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">店铺介绍</label>
+                                <div class="col-sm-5">
+                                    <textarea class="form-control" name="brief"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"> 备注</label>
+                                <div class="col-sm-5">
+                                    <textarea class="form-control" name="audit_note"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <input type="hidden" value="2" name="group_id">
+                                    <button class="btn btn-primary submit-btn" type="submit">保存内容</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/plugins/fancybox/jquery.fancybox.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+ <!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<script src="__JS__/plugins/layer/laydate/laydate.js"></script>
+{/block}
+{block name="script"}
+ <script>
+    $(document).ready(function () {
+        //上传
+        layui.use('upload', function(){
+          var upload = layui.upload;
+          //执行实例
+          var uploadInst = upload.render({
+            elem: '#upload', //绑定元素
+            url: "/index.php/api/upload/upload",
+            type: 'image',
+            ext: 'jpg|png|gif|bmp',
+            size: 200, //最大允许上传的文件大小
+            data:{
+                width:$('#upload').attr('data-width'),
+                height:$('#upload').attr('data-height'),
+                file_path:$('#upload').attr('data-path')
+            },
+            done: function (data) {
+                console.log(data);
+                if (data.error === 0) {
+                    $('.thumb-img').attr('src',data.url);
+                    $('.thumb-a').attr('href',data.url);
+                    $('.theme').val(data.url);
+                } else {
+                    alert(data.message);
+                }
+            }
+          });
+        });
+        //单选
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+</script>
+{/block}

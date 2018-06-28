@@ -1,0 +1,122 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" href="__CSS__/ztree-metro-style.css">
+{/block}
+{block name="body"}
+<div class="row border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>添加权限组</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <a>菜单管理</a>
+            </li>
+            <li>
+                <a>用户管理</a>
+            </li>
+            <li>
+                <strong>添加权限组</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>权限组<small></small></h5>
+                </div>
+                <ul id="tree" class="ztree"></ul>
+                 <input type="hidden" id="group_id" name="id" value="{$id}">
+        <button class="btn btn-primary" id="auth-btn">授权</button>
+            </div>
+        </div>
+       
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/jquery.ztree.all.min.js"></script>
+{/block}
+{block name="script"}
+<script>
+    $(document).ready(function(){
+        /**
+         * 加载树形授权菜单
+         */
+        var _id = $("#group_id").val();
+        var tree = $("#tree");
+        var zTree;
+
+        // zTree 配置项
+        var setting = {
+            check: {
+                enable: true
+            },
+            view: {
+                dblClickExpand: false,
+                showLine: true,
+                showIcon: false,
+                selectedMulti: false
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pid",
+                    rootpid: ""
+                },
+                key: {
+                    name: "title"
+                }
+            }
+        };
+
+        $.ajax({
+            url: "{:url('admin/auth_group/getJson')}",
+            type: "post",
+            dataType: "json",
+            cache: false,
+            data: {
+                id: _id
+            },
+            success: function (data) {
+                zTree = $.fn.zTree.init(tree, setting, data);
+            }
+        });
+
+        /**
+         * 授权提交
+         */
+        $("#auth-btn").on("click", function () {
+            var checked_ids,auth_rule_ids = [];
+            checked_ids = zTree.getCheckedNodes(); // 获取当前选中的checkbox
+
+            $.each(checked_ids, function (index, item) {
+                auth_rule_ids.push(item.id);
+            });
+            $.ajax({
+                url: "{:url('admin/auth_group/updateAuthGroupRule')}",
+                type: "post",
+                cache: false,
+                data: {
+                    id: _id,
+                    auth_rule_ids: auth_rule_ids
+                },
+                success: function (data) {
+                    if(data.code === 1){
+                        setTimeout(function () {
+                            location.href = data.url;
+                        }, 1000);
+                    }
+                }
+            });
+        });
+    });
+</script>
+{/block}

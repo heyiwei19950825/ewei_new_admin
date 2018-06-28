@@ -1,0 +1,176 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>宜佳网络后台管理系统</title>
+    <link href="__CSS__/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__STATIC__/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+    <link href="__CSS__/animate.css" rel="stylesheet">
+    <link href="__CSS__/style.css?v=2.2.0" rel="stylesheet">
+    <link href="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" >
+    <link href="__JS__/plugins/bootstrap-fileinput-master/fileinput.min.css"  rel="stylesheet" >
+    <link href="__JS__/plugins//bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="__JS__/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    {block name="css"}{/block}
+    <style>
+        .layui-upload-file{
+            display: none!important;
+        }
+        #editable{
+            font-size: 8px;
+        }
+    </style>
+</head>
+<body class="top-navigation">
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="{:url('/admin')}" class="navbar-brand">企业官网管理</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar" style="border-bottom-style: solid;">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="javascript:">{:session('admin_name')}</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        {foreach name="menu" item="vo"}
+                        <li class="dropdown">
+                            <a  href="{:url($vo.name)}" class="dropdown-toggle" > {$vo.title} </a>
+                        </li>
+                        {/foreach}
+                    </ul>
+
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <span class="m-r-sm text-muted welcome-message"><a href="{:url('/admin')}" title="返回首页"><i class="fa fa-home"></i></a>欢迎使用宜佳网络管理系统</span>
+                        </li>
+                        <li>
+                            <a href="{:url('admin/login/logout')}">
+                                <i class="fa fa-sign-out"></i> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="navbar-collapse collapse"  style="margin: 0 auto">
+                <ul class="nav navbar-nav">
+                    {foreach name="menu" item="vo"}
+                    <li class="dropdown">
+                            {if isset($vo['children'])}
+                            {foreach name="vo['children']" item="ivo"}
+                                <a  href="{:url($ivo.name)}" class="dropdown-toggle"> {$ivo.title} </a>
+                            {/foreach}
+                            {/if}
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+        <!--主体-->
+        {block name="body"}{/block}
+        <div class="footer">
+            <div>
+                <strong>Copyright</strong> 2015-2017 眉山市坤飞网络科技有限公司 版权所有
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    // 定义全局JS变量
+    var GV = {
+        current_controller: "admin/{$controller|default=''}/",
+        base_url: "__STATIC__"
+    };
+</script>
+
+<script src="__JS__/jquery-2.1.1.min.js"></script>
+<script src="__JS__/bootstrap.min.js?v=3.4.0"></script>
+<script src="__JS__/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+<!-- Peity -->
+<script src="__JS__/plugins/pace/pace.min.js"></script>
+<!-- jQuery UI -->
+<script src="__JS__/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- GITTER -->
+<script src="__JS__/plugins/gritter/jquery.gritter.min.js"></script>
+<script src="__JS__/page/index.js"></script>
+<!--时间插件-->
+<script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<!--上传插件-->
+<script src="__JS__/plugins/bootstrap-fileinput-master/fileinput.min.js"></script>
+
+<!--下拉框-->
+<script src="__JS__/plugins/bootstrap-select/bootstrap-select.js"></script>
+<script src="__JS__/plugins/bootstrap-select/defaults-zh_CN.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+
+<script src="__JS__/hplus.js?v=2.2.0"></script>
+<script>
+    $(document).ready(function () {
+        WinMove();
+
+        var msg = [];
+
+        //定时刷新
+        var  getMessage= function(){
+            $.ajax({
+                url: '/admin/message/message',
+                type: 'post',
+                success: function (info) {
+                    msg = info.data;
+                    $('.feed_book_number').html(msg.feedBook.count);
+                    if(msg.feedBook.count != 0){
+                        setTimeout(function () {
+                            $.gritter.add({
+                                title: '您有'+msg.feedBook.count+'条未读信息',
+                                text: '请前往<a href="/admin/message/index" class="text-warning">消息中心</a>查看用户反馈',
+                                time: 10000
+                            });
+                        }, 2000);
+                    }
+                    if(msg.book.count != 0 ){
+                        $('.book_number').html( msg.book.count);
+                        var audio = $("#audio")[0];
+                        audio.play();
+                        var list = msg.book.list;
+                        var html = ''
+                        $(list).each(function(i,v){
+                            html += '<li> ' +
+                                    '<div class="dropdown-messages-box"> ' +
+                                    '<a href="profile.html" class="pull-left"> ' +
+                                    '<img alt="image" class="img-circle" src="'+v.portrait+'"> ' +
+                                    '</a> ' +
+                                    '<div class="media-body"> ' +
+                                    '<small class="pull-right">刚刚</small> <strong>'+v.username+'</strong> '+v.remark+' <br> <small class="text-muted">'+v.create_time+'</small> </div> </div> </li><li class="divider"></li>'
+                        })
+                        html += ' <li> <div class="text-center link-block"> <a href="/admin/book/order.html"> <i class="fa fa-envelope"></i>  <strong> 查看所有订单</strong> </a> </div> </li>';
+                        $('.book-msg').append(html);
+                    }
+                }
+            });
+        };
+        getMessage();
+        setInterval(function(){
+            getMessage();
+        },60000);
+    });
+</script>
+
+
+{block name="js"}{/block}
+<!--页面JS脚本-->
+{block name="script"}
+
+{/block}
+</html>

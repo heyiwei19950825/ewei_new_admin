@@ -1,0 +1,189 @@
+{extend name="plug_in" /}
+{block name="css"}
+<link href="__JS__/plugins/fancybox/jquery.fancybox.css" rel="stylesheet">
+<link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+
+{/block}
+{block name="body"}
+<style>
+    .layui-upload-file{
+        display: none!important;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>网站配置<small></small></h5>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal" id="ajax-from"  action="{:url('admin/enterprise/system')}" method="post">
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span>*</span> 网站名称</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="name" value="{$info.name}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">logo</label>
+                        <div class="col-sm-5">
+                            <img alt="image"  data-path="enterprise_server" class="thumb-img upload" src="{$info.logo}" style="width:300px;margin-left:15px;" />
+                            <input type="hidden" name="logo" class="theme" value="{$info.logo}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">logo 缩略图</label>
+                        <div class="col-sm-5">
+                            <img alt="image"  data-path="enterprise_system" class="upload thumb-img"  src="{$info.logo_thum}" style="width:100px;margin-left:15px;" />
+                            <input type="hidden" name="logo_thum" class="theme" value="{$info.logo_thum}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">简介</label>
+                        <div class="col-sm-5">
+                            <textarea name="about_describe" placeholder="（选填）请输入说明" id="description" class="form-control" style="height:200px">{$info.about_describe}</textarea>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">地址</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="address" value="{$info.address}">
+                        </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">手机号</label>
+                        <div class="col-sm-2">
+                            <input type="number" class="form-control" name="mobile" value="{$info.mobile}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">邮箱</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="email" value="{$info.email}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">QQ号</label>
+                        <div class="col-sm-2">
+                            <input type="number" class="form-control" name="qq" value="{$info.qq}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信号</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" name="wechat" value="{$info.wechat}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信二维码</label>
+                        <div class="col-sm-5">
+                            <img alt="image"  data-path="enterprise_system" class="upload thumb-img"  src="{$info.wechat_pic}" style="width:100px;margin-left:15px;" />
+                            <input type="hidden" name="wechat_pic" class="theme" value="{$info.wechat_pic}">
+                        </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div  class="form-group">
+                        <label class="col-sm-2 control-label">网站状态</label>
+                        <div class="col-sm-20" >
+                            <div class="radio i-checks" style="display:inline;">
+                                <label>
+                                    <input type="radio" value="1" name="status" {if condition="$info.status==1"} checked="checked"{/if}> <i></i>开启</label>
+                            </div>
+                            <div class="radio i-checks"  style="display:inline;">
+                                <label>
+                                    <input type="radio" value="0" name="status" {if condition="$info.status==0"} checked="checked"{/if}> <i></i>关闭</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">关于我们</label>
+                        <div class="col-sm-8" style="height:300px;">
+                            <textarea name="about_content" placeholder="" class="" id="content" style="height:200px;">{$info.about_content}</textarea>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <input type="hidden" name="id">
+                            <button class="btn btn-primary submit-btn" type="submit">保存内容</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/plugins/fancybox/jquery.fancybox.js"></script>
+<script src="__JS__/plugins/layui/layui.js"></script>
+<!-- iCheck -->
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+
+<!--//富文本-->
+<script src="__JS__/ueditor/ueditor.config.js"></script>
+<script src="__JS__/ueditor/ueditor.all.min.js"></script>
+{/block}
+{block name="script"}
+<script>
+    $(document).ready(function () {
+
+        var ue = UE.getEditor('content',{
+            // initialFrameWidth :800,//设置编辑器宽度
+            initialFrameHeight:200,//设置编辑器高度
+            scaleEnabled:true
+        });
+        //上传
+        layui.use('upload', function(){
+            var upload = layui.upload;
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '.upload', //绑定元素
+                url: "/index.php/api/upload/upload",
+                type: 'image',
+                ext: 'jpg|png|gif|bmp',
+                size: 2000, //最大允许上传的文件大小
+                data:{
+                    width:$('#upload').attr('data-width'),
+                    height:$('#upload').attr('data-height'),
+                    file_path:$('#upload').attr('data-path')
+                },
+                before: function(){
+                    that = this.item;
+                },
+                done: function (data) {
+                    if (data.error === 0) {
+                        that = $(that).parents('.form-group');
+                        that.find('.thumb-img').attr('src',data.url);
+                        that.find('.thumb-a').attr('href',data.url);
+                        that.find('.theme').val(data.url);
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+
+        //单选
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+    });
+</script>
+{/block}

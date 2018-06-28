@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="renderer" content="webkit">
+
+    <title>百檬后台管理系统</title>
+    <link href="__CSS__/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__STATIC__/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
+
+    <link href="__CSS__/animate.css" rel="stylesheet">
+    <link href="__CSS__/style.css?v=2.2.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg" style="background-image: url(__IMAGES__/login.jpg)">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown" style="position: relative;top:30%">
+        <div>
+            <h3 style="color: #fff;">欢迎使用 百檬美容美发后台管理系统</h3>
+
+            <form class="m-t" role="form" action="{:url('admin/login/login')}" method="post">
+                <div class="form-group">
+                    <input type="text" name="username"  class="form-control" placeholder="用户名" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password"  class="form-control" placeholder="密码" required="">
+                </div>
+                <div class="col-lg-12" style="padding-right:0;padding-left:0;">
+                    <div class="col-lg-4" style="padding-right:0;padding-left:0; height: 35px;line-height: 35px;">
+                       <b> <a href="/admin/shop/register.html" style="color:#ec4758">免费开店</a></b>
+                    </div>
+                    <div class="col-lg-8" style="padding-right:0;">
+                        <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+                    </div>
+                </div>
+                </p>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    // 定义全局JS变量
+    var GV = {
+        current_controller: "admin/{$controller|default=''}/"
+    };
+</script>
+</html>
