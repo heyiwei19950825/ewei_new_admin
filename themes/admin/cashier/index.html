@@ -7,77 +7,625 @@
     <link href="__STATIC__/font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
     <link href="__CSS__/animate.css" rel="stylesheet">
     <link href="__CSS__/style.css?v=2.2.0" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"  rel="stylesheet">
     <link href="__JS__/plugins//bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
     <style>
-        .user-info{
-            margin-top: 20px;
+        .user-info {
+            margin-top: 1vw;
         }
         .user-search{
-            padding:20px 0 ;
+            padding:20px 30px;
         }
-        .search-result{border-style: solid; border-width: 0.5px;}
+        .goods-info, .server-info, .select-server,.staff-select,.select-goods{
+            cursor:pointer;
+        }
+        .search-result{
+            border-style: solid; border-width: 0.5px;
+        }
+        .main-left{
+            margin-top: 20px;
+        }
+        th {
+            text-align: center;
+        }
     </style>
 </head>
 <body style="background-color:#fff ">
-<div class="col-xs-8 main-left">
+<div class="col-xs-7 main-left" style="min-width: 700px;">
     <div class="main-tab">
         <div class="tabs-container">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 会员消费</a>
+                <li class="active member"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 会员消费</a>
                 </li>
-                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">散客消费</a>
+                <li class="temporary"><a data-toggle="tab" href="#tab-2" aria-expanded="false">散客消费</a>
                 </li>
-                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">新建用户</a>
+                <li class="new"><a data-toggle="tab" href="#tab-3" aria-expanded="false">新建用户</a>
                 </li>
             </ul>
         </div>
         <div class="col-xs-12 user-info">
-            <div class="col-xs-8 user-search" >
-                <select class="selectpicker" data-live-search="true">
-                    <option value="1" selected>请选择</option>
-                    <option value="1">广东省</option>
-                    <option value="2">广西省</option>
-                    <option value="3">福建省</option>
-                    <option value="4">湖南省</option>
-                    <option value="5">山东省</option>
+            <div class="col-xs-3 user-search" >
+                <select class="selectpicker" data-live-search="true" data-style="btn-primary">
+                    <option value="0" selected>请选择</option>
                 </select>
             </div>
-            <div class="col-xs-8" style="display: none;">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        客户资料
-                    </div>
-                    <div class="panel-body">
-                        <p>通过 .panel-heading 可以很简单地为面板加入一个标题容器。你也可以通过添加设置了 .panel-title 类的标签，添加一个预定义样式的标题。 为了给链接设置合适的颜色，务必将链接放到带有 .panel-title 类的标题标签内。</p>
+            <div class="col-xs-12">
+                <div class="col-xs-5 user-info-1"  style="display: none">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            客户资料
+                        </div>
+                        <input type="hidden" value="0" class="user-id">
+                        <div class="panel-body">
+                            <div  class="col-xs-2" >
+                                <img src="__STATIC__/img/default_thumb.png" alt="" width="50px;" class="user_portrait">
+                            </div>
+                            <div class="col-xs-10" >
+                                <div class="col-xs-6">
+                                    <div>姓名：<span class="user_name"></span></div>
+                                    <div>电话：<span class="user_mobile"></span></div>
+                                    <div>余额：<span class="user_balance"></span>元</div>
+                                    <div> 积分：<span class="user_integral"></span>积分</div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div>会员：<span class="rank_name"></span></div>
+                                    <div>折扣：<span class="rank_discount"></span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
     <div class="main-tab-content">
         <div class="tab-content">
-            <div id="tab-1" class="tab-pane active">
-                <div class="panel-body">
-                    <strong>HTML5 文档类型</strong>
-                    <p>Bootstrap 使用到的某些 HTML 元素和 CSS 属性需要将页面设置为 HTML5 文档类型。在你项目中的每个页面都要参照下面的格式进行设置。</p>
+            <!--<div id="tab-1" class="tab-pane active" style="display: none">-->
+            <div id="tab-1" class="tab-pane active" style="display:block">
+                    <div class="panel-body">
+                    <strong>
+                            <div class="tabs-container">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#tab-14" aria-expanded="true"> 收银</a>
+                                    </li>
+                                    <li class=""><a data-toggle="tab" href="#tab-15" aria-expanded="false">充值</a>
+                                    </li>
+                                    <li class=""><a data-toggle="tab" href="#tab-16" aria-expanded="false">自定义收银</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </strong>
+                        <div class="tab-content">
+                            <div id="tab-14" class="tab-pane active">
+                                <form action="{:url('admin/user/deal')}" class="ajax-from" method="post">
+                                    <input type="hidden" value="0" class="user-id" name="u_id">
+                                    <input type="hidden" value="0" class="type" name="type">
+                                    <input type="hidden" name="staffNumber" value="0">
+                                    <div class="panel-body">
+                                    <table class="table table-striped table-bordered table-hover col-xs-12" style="display: table;">
+                                        <thead>
+                                        <tr class="odd" height="30px">
+                                            <th scope="col"  rowspan="2" class="txal pdl10" >项目名称
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2" >原价
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2"  >数量
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2" >最终销售价格
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2" style="" class="table-option">操作
+                                            </th>
+                                        </tr>
+                                        <tr class="odd-item" height="30px">
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="server-data" data-id="0">
+                                            <input type="hidden" class="server-tr" name="server[]" >
+                                            <td class="select-server server-name" data-id="0"  data-toggle="modal" data-target="#server-list"></td>
+                                            <td><span class="server-price"></span><input type="hidden" name="server-price[]" class="server-price-val"></td>
+                                            <td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td>
+                                            <td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]" ></td>
+                                            <td  class="del-tr" style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>
+                                        </tr>
+                                        <tr class="count">
+                                            <td colspan="1" height="60"><img src="__STATIC__/img/Add.png"  class="stk" >
+                                            </td>
+                                            <td colspan="15" align="right" height="60" class="txar stk">
+                                                <div>
+                                                    折扣：<span class="txw1 r1 txs20 pdr20" id="rank_discount">0</span>折
+                                                    <input type="hidden" name="rank_discount" value="0">
+                                                </div>
+                                                <div>
+                                                    原价：<span class="txw1 r1 txs20 pdr20" id="o_price">0</span>元
+                                                </div>
+                                                <div>
+                                                    优惠价格：<span class="txw1 r1 txs20 pdr20" id="discount_price">-0</span>元
+                                                </div>
+                                                <div>
+                                                    项目实收：<span class="txw1 r1 txs20 pdr20" id="zhsy_xm">0</span>元
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="15" align="right">
+                                                <span>备注：<input type="text" style="margin-right:50px;" name="remark"></span>
+                                                <span class="btn btn-primary submit-btn"  data-type="0">收银结算</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </form>
+                                <form action="{:url('admin/user/goodsDeal')}" class="ajax-from" method="post">
+                                    <input type="hidden" value="0" class="user-id" name="u_id">
+                                    <input type="hidden" value="0" class="type" name="type">
+                                    <div class="panel-body">
+                                        <table class="table table-striped table-bordered table-hover col-xs-12" style="display: table;">
+                                            <thead>
+                                            <tr class="odd" height="30px">
+                                                <th scope="col"  rowspan="2" class="txal pdl10" >商品名称
+                                                </th>
+                                                <th scope="col" colspan="1" rowspan="2" >原价
+                                                </th>
+                                                <th scope="col" colspan="1" rowspan="2"  >数量
+                                                </th>
+                                                <th scope="col" colspan="1" rowspan="2" >最终销售价格
+                                                </th>
+                                                <th scope="col" colspan="1" rowspan="2" >推销员
+                                                </th>
+                                                <th scope="col" colspan="1" rowspan="2" style="" class="goods-table-option">操作
+                                                </th>
+                                            </tr>
+                                            <tr class="goods-odd-item" height="30px">
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="goods-data" data-id="0">
+                                                <input type="hidden" class="goods-tr" name="goods[]" >
+                                                <td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list"></td>
+                                                <td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td>
+                                                <td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td>
+                                                <td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td>
+                                                <td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td>
+                                                <td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>
+                                            </tr>
+                                            <tr class="goods-count">
+                                                <td colspan="1" height="60"><img src="__STATIC__/img/Add.png"  class="goods-stk" >
+                                                </td>
+                                                <td colspan="15" align="right" height="60" class="txar stk">
+                                                    <div>
+                                                        折扣：<span class="txw1 r1 txs20 pdr20" id="goods_rank_discount">0</span>折
+                                                        <input type="hidden" name="goods_rank_discount" value="0">
+                                                    </div>
+                                                    <div>
+                                                        原价：<span class="txw1 r1 txs20 pdr20" id="goods_o_price">0</span>元
+                                                    </div>
+                                                    <div>
+                                                        优惠价格：<span class="txw1 r1 txs20 pdr20" id="goods_discount_price">-0</span>元
+                                                    </div>
+                                                    <div>
+                                                        项目实收：<span class="txw1 r1 txs20 pdr20" id="goods_zhsy_xm">0</span>元
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="16" align="right">
+                                                    <span>备注：<input type="text" style="margin-right:50px;" name="remark"></span>
+                                                    <span class="btn btn-primary submit-btn" data-type="1">收银结算</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="tab-15" class="tab-pane">
+                                <div class="panel-body">
+                                    <form class="form-horizontal ajax-from" method="post" action="/admin/user/recharge.html">
+                                        <input type="hidden" value="0" class="user-id" name="u_id">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">充值金额</label>
+                                            <div class="col-sm-5">
+                                                <div class="input-group m-b">
+                                                    <input type="number" class="form-control" name="money" value="0">
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">赠送金额</label>
+                                            <div class="col-sm-5">
+                                                <div class="input-group m-b">
+                                                    <input type="number" class="form-control" name="give_money" value="0">
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">赠送积分</label>
+                                            <div class="col-sm-5">
+                                                <div class="input-group m-b">
+                                                    <input type="number" class="form-control" name="give_integral" value="0">
+                                                    <span class="input-group-addon">积分</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"> 备注</label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <input type="text" class="form-control" name="remark">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"></label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-xs-9 text-right">
+                                                        <div class="btn btn-primary submits-btn-submits-btn" type="button">充值</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="tab-16" class="tab-pane">
+                                <div class="panel-body">
+                                    <form class="form-horizontal ajax-from" method="post" action="/admin/user/customize.html">
+                                        <input type="hidden" value="0" class="user-id" name="u_id">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">自定义消费金额</label>
+                                            <div class="col-sm-5">
+                                                <div class="input-group m-b">
+                                                    <input type="number" class="form-control" name="money" value="0">
+                                                    <span class="input-group-addon">元</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"> 备注</label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <input type="text" class="form-control" name="remark">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"></label>
+                                            <div class="col-sm-10">
+                                                <div class="row">
+                                                    <div class="col-xs-9 text-right">
+                                                        <div class="btn btn-primary submits-btn-submits-btn" type="button">确认消费</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                 </div>
+
             </div>
             <div id="tab-2" class="tab-pane">
                 <div class="panel-body">
-                    <strong>移动设备优先</strong>
-                    <p>在 Bootstrap 2 中，我们对框架中的某些关键部分增加了对移动设备友好的样式。而在 Bootstrap 3 中，我们重写了整个框架，使其一开始就是对移动设备友好的。这次不是简单的增加一些可选的针对移动设备的样式，而是直接融合进了框架的内核中。也就是说，Bootstrap 是移动设备优先的。针对移动设备的样式融合进了框架的每个角落，而不是增加一个额外的文件。</p>
+                    <form action="{:url('admin/user/deal')}" class="ajax-from" method="post">
+                        <input type="hidden" value="0" class="user-id" name="u_id">
+                        <input type="hidden" value="1" class="type" name="type">
+                        <input type="hidden" name="staffNumber" value="0">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover col-xs-12" style="display: table;">
+                                <thead>
+                                <tr class="odd" height="30px">
+                                    <th scope="col"  rowspan="2" class="txal pdl10" >项目名称
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2" >原价
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2"  >数量
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2" >最终销售价格
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2" style="" class="table-option">操作
+                                    </th>
+                                </tr>
+                                <tr class="odd-item" height="30px">
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="server-data" data-id="0">
+
+                                </tr>
+                                <tr class="count">
+                                    <td colspan="1" height="60"><img src="__STATIC__/img/Add.png"  class="stk" >
+                                    </td>
+                                    <td colspan="15" align="right" height="60" class="txar stk">
+                                        <div>
+                                            项目实收：<span class="txw1 r1 txs20 pdr20" id="outher_zhsy_xm">0</span>元
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="16" align="right">
+                                        <span>备注：<input type="text" style="margin-right:50px;" name="remark"></span>
+                                        <span class="btn btn-primary submit-btn"  data-type="0">收银结算</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <form action="{:url('admin/user/goodsDeal')}" class="ajax-from" method="post">
+                        <input type="hidden" value="0" class="user-id" name="u_id">
+                        <input type="hidden" value="1" class="type" name="type">
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered table-hover col-xs-12" style="display: table;">
+                                <thead>
+                                <tr class="odd" height="30px">
+                                    <th scope="col"  rowspan="2" class="txal pdl10" >商品名称
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2" >原价
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2"  >数量
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2" >最终销售价格
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2" >推销员
+                                    </th>
+                                    <th scope="col" colspan="1" rowspan="2" style="" class="goods-table-option">操作
+                                    </th>
+                                </tr>
+                                <tr class="goods-odd-item" height="30px">
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="goods-data" data-id="0">
+
+                                </tr>
+                                <tr class="goods-count">
+                                    <td colspan="1" height="60"><img src="__STATIC__/img/Add.png"  class="goods-stk" >
+                                    </td>
+                                    <td colspan="15" align="right" height="60" class="txar stk">
+                                        <div>
+                                            项目实收：<span class="txw1 r1 txs20 pdr20" id="outher_goods_zhsy_xm">0</span>元
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="16" align="right">
+                                        <span>备注：<input type="text" style="margin-right:50px;" name="remark"></span>
+                                        <span class="btn btn-primary submit-btn" data-type="1">收银结算</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="tab-3" class="tab-pane">
+                <div class="panel-body">
+                    <form class="form-horizontal ajax-from" action="/admin/user/save.html" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 手机号</label>
+                            <div class="col-sm-5">
+                                <input type="number" class="form-control required" name="mobile">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 姓名</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control required" name="username">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 密码</label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control required" name="password">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 确认密码</label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control required" name="confirm_password">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span>性别</label>
+                            <div class="col-sm-20">
+                                <div class="radio i-checks" style="display:inline;">
+                                    <label>
+                                        <input type="radio" checked="" value="1" name="sex"> <i></i>男</label>
+                                </div>
+                                <div class="radio i-checks" style="display:inline;">
+                                    <label>
+                                        <input type="radio" value="0" name="sex"> <i></i>女</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 出生年月</label>
+                            <div class="col-sm-5">
+                                <input class="form-control required date" name="birthday" style="height: 30px;    line-height: 30px;">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><span>*</span> 客户来源</label>
+                            <div class="col-sm-5">
+                                <select name="guest_way" class="form-control required">
+                                    <option value="1">老带新</option>
+                                    <option value="2">朋友介绍</option>
+                                    <option value="3">员工推销</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">卡类型</label>
+                            <div class="col-sm-5 rank-demo"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">充值金额</label>
+                            <div class="col-sm-5">
+                                <div class="input-group m-b">
+                                    <input type="number" class="form-control" name="money" value="0">
+                                    <span class="input-group-addon">元</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">赠送金额</label>
+                            <div class="col-sm-5">
+                                <div class="input-group m-b">
+                                    <input type="number" class="form-control" name="give_money" value="0">
+                                    <span class="input-group-addon">元</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">赠送积分</label>
+                            <div class="col-sm-5">
+                                <div class="input-group m-b">
+                                    <input type="number" class="form-control" name="give_integral" value="0">
+                                    <span class="input-group-addon">元</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> 有效期</label>
+                            <div class="col-sm-5">
+                                <input class="form-control required date" name="validity_time" style="height: 30px;    line-height: 30px;">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> 备注</label>
+                            <div class="col-sm-5">
+                                <textarea class="form-control" name="remark"></textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <div class="btn btn-primary submits-btn-new-user" >保存内容</div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
-<div class="col-xs-4 main-right">
-
 </div>
+<div class="col-xs-4 main-right" style="margin-top: 50px; min-width: 400px;">
+    <div class="form-group col-xs-9">
+        <input type="text" placeholder="搜索 服务和商品信息" class="form-control search-goods" >
+    </div>
+    <div class="tabs-container col-xs-12">
+        <ul class="nav nav-tabs">
+            <li class="active server-tab"><a data-toggle="tab" href="#tab-21" aria-expanded="true"> 服务</a>
+            </li>
+            <li class="goods-tab"><a data-toggle="tab" href="#tab-22" aria-expanded="false"> 商品</a>
+            </li>
+        </ul>
+    </div>
+    <div style="padding: 10px;" class="col-xs-12">
+        <div class="main-tab-content">
+            <div class="tab-content">
+                <div id="tab-21" class="tab-pane active" >
+                    <div class="panel-body">
+                        <div class="row server">
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-22" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="row goods"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="server-list" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">选取服务</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="row server-modal">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="goods-list" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">选取商品</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div class="row goods-modal">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="staff" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">选择员工</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row staff">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="__JS__/jquery-2.1.1.min.js"></script>
 <script src="__JS__/bootstrap.min.js?v=3.4.0"></script>
 <script src="__JS__/plugins/metisMenu/jquery.metisMenu.js"></script>
@@ -85,6 +633,9 @@
 <script src="__JS__/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- GITTER -->
 <script src="__JS__/plugins/gritter/jquery.gritter.min.js"></script>
+
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+
 <!--时间插件-->
 <script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="__JS__/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
@@ -95,8 +646,666 @@
 <script src="__JS__/plugins/bootstrap-select/defaults-zh_CN.js"></script>
 <script>
     $(function(){
+        var activeTab = '#tab-14';
+        // 时间控件
+        $('.date').datetimepicker({
+            language: 'zh-CN',//显示中文
+            format: 'yyyy-mm-dd',//显示格式
+            minView: "month",//设置只显示到月份
+            initialDate: new Date(),//初始化当前日期
+            autoclose: true,//选中自动关闭
+            todayBtn: true//显示今日按钮
+        })
 
+        // 时间控件
+        $('.time').datetimepicker({
+            language: 'zh-CN',//显示中文
+            format: 'hh:ii:ss',//显示格式
+            startView:1,
+            initialDate: new Date(),//初始化当前日期
+            autoclose: true,//选中自动关闭
+            todayBtn: true//显示今日按钮
+        })
+
+        // 获取会员卡级别
+        $('.new').on('click',function(){
+            if($('.rank-demo').html() == ''){
+                $.post('/admin/user_rank/index',{id:1},function(e){
+                    if(e.code == 1 ){
+                        var rankDemo = $('.rank-demo');
+                        var datas = e.data;
+                        var optionHtml = '<option value="">请选择会员卡类型</option>';
+                        for (var i = 0; i < datas.length; i++) {
+                            optionHtml += "<option value='"+datas[i].id+"'>"
+                                    + datas[i].name + "【"+ datas[i].discount+"折】</option>";
+                        }
+                        var html = '<select class="form-control m-b" name="rank">'+optionHtml+'</select>';
+
+                        rankDemo.append(html);
+                    }
+                })
+            }
+        })
+        //单选
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+        var addHtml = '';
+        getTechnicianList();
+        //点击散客计费
+        $('.temporary').on('click',function(){
+            tableInit();
+            goodsTableInit();
+            $('#tab-14').remove();
+            activeTab = '#tab-2';
+        })
+        //获取用户信息列表
+        $.ajax({
+            // get请求地址
+            url: '/admin/user/search',
+            dataType: "json",
+            success: function (row) {
+                var data = row.data;
+                for (var i = 0; i < data.length; i++) {
+                    $('.selectpicker').append("<option value=" + data[i].id + ">" + data[i].username+'【' +data[i].mobile+ "】</option>");
+                }
+                // 缺一不可
+                $('.selectpicker').selectpicker('refresh');
+                $('.selectpicker').selectpicker('render');
+            }
+        });
+        //搜索用户信息
+        $('.selectpicker').on('changed.bs.select',function(e){
+            getUserInfo();
+        });
+
+
+
+        //点击选项卡
+        $('.temporary,.new').on('click',function(){
+            $('.user-info').css('display','none');
+            $('#tab-1').css('display','none');
+            $('.user-id').val(0);
+        })
+        $('.new').on('click',function(){
+            $('.main-right').css('display','none');
+        })
+        $('.temporary').on('click',function(){
+            $('.main-right').css('display','block');
+        })
+        $('.member').on('click',function(){
+           window.location.reload();
+        })
+
+        //商品服务搜索事件
+        $(".search-goods").on("keyup", function (e) {
+            var key = $(".search-goods").val();
+            $('.goods-info').each(function(i,v){
+                var text =  $(v).text();
+                if(text.indexOf(key) < 0 ){
+                    $(v).css('display','none');
+                }else{
+                    $(v).css('display','block');
+                }
+            })
+            $('.server-info').each(function(i,v){
+                var text =  $(v).text();
+                if(text.indexOf(key) < 0 ){
+                    $(v).css('display','none');
+                }else{
+                    $(v).css('display','block');
+                }
+            })
+        });
+
+        //添加行
+        $('.count').find('img').on('click',function(){
+            var id = $('.server-data').length  ;
+
+            var html  = ' <tr class="server-data" data-id="'+id+'"> <input type="hidden" class="server-tr" name="server[]">' +
+                    '<td class="select-server server-name"  data-id="'+id+'" data-toggle="modal" data-target="#server-list"></td> ' +
+                    '<td><span class="server-price"></span><input type="hidden" name="server-price[]" class="server-price-val"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]"></td> ' +
+                    addHtml +
+                    '<td style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
+                    '</tr>'
+            $(activeTab).find('.count').before(html);
+        })
+
+        //初始化
+        function tableInit(){
+            $('.server-data').remove();
+            var html  = ' <tr class="server-data" data-id="0"> <input type="hidden" class="server-tr" name="server[]">' +
+                    '<td class="select-server server-name"  data-id="0" data-toggle="modal" data-target="#server-list"></td> ' +
+                    '<td><span class="server-price"></span><input type="hidden" name="server-price[]" class="server-price-val"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]"></td> ' +
+                    addHtml +
+                    '<td style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
+                    '</tr>'
+            $(activeTab).find('.count').before(html);
+        }
+        //初始化
+        function goodsTableInit(){
+            $('.goods-data').remove();
+            var html  = ' <tr class="goods-data" data-id="0"> ' +
+                    '<input type="hidden" class="goods-tr" name="goods[]" > ' +
+                    '<td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list"></td> ' +
+                    '<td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td> ' +
+                    '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
+                    '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
+                    '</tr>'
+            $(activeTab).find('.goods-count').before(html);
+        }
+
+        function getUserInfo(){
+            var value =  $('.selectpicker').val();
+            if( value == 0 ){
+                $('.user-info-1').css('display','none');
+                $('.user-id').val(0);
+                return false;
+            }
+            $.post('/admin/user/getUserInfo',{
+                id:value
+            },function(v){
+                if( v.code == 1 ){
+                    //填充用户数据
+                    $('.user-id').val(v.data.id);
+                    $('.user_portrait').attr('src',v.data.portrait);
+                    $('.user_name').text(v.data.username);
+                    $('.user_mobile').text(v.data.mobile);
+                    $('.user_balance').text(v.data.balance);
+                    $('.user_integral').text(v.data.integral);
+                    $('.rank_name').text(v.data.rank.name);
+                    $('.rank_discount').text(v.data.rank.discount);
+                    $('#goods_rank_discount').text(v.data.rank.discount);
+                    $('#rank_discount').text(v.data.rank.discount);
+                    $('input[name=rank_discount]').val(v.data.rank.discount);
+                    $('input[name=goods_rank_discount]').val(v.data.rank.discount);
+                    //显示选项框
+                    $('#tab-1').css('display','block');
+                    //显示用户信息
+                    $('.user-info-1').css('display','block');
+
+                    countSum();
+                    goodsCountSum();
+                }
+            })
+        }
+
+        var goodsData = '';
+        var serverData = '';
+
+        // 服务列表
+        $.post('/admin/server_project/index',{},function(data){
+            serverData = data.data;
+            selectServer();
+
+        })
+
+        //商品列表
+        $.post('/admin/goods/index',{ },function(data){
+            goodsData = data.data;
+            selectGoods();
+
+        })
+
+        //删除当前行
+        $('body').on('click','.rvbtn,.goods-rvbtn',function(){
+            $(this).parents('tr').remove();
+            countSum();
+            goodsCountSum();
+        })
+
+        //商品信息
+        function selectGoods(){
+            var goodsHtml = '';
+            $(goodsData).each(function(i,v){
+                    goodsHtml +='<div class="col-sm-4 goods-info" data-name="'+v.name+'" data-price="'+v.sp_price+'" data-id="'+v.id+'"> <div class="panel panel-info"> <div class="panel-heading">'+v.name+' </div> <div class="panel-body" style="color:red">' +
+                            v.sp_price +'元'+
+                            ' </div> </div> </div>'
+            });
+            $('.goods').html(goodsHtml);
+            $('.goods-modal').html(goodsHtml);
+        }
+        //服务信息
+        function selectServer(){
+            var serverHtml = '';
+            $(serverData).each(function(i,v){
+                serverHtml +='<div class="col-sm-4 server-info" data-name="'+v.name+'" data-price="'+v.price+'" data-id="'+v.id+'"> <div class="panel panel-danger"> <div class="panel-heading">'+v.name+' </div> <div class="panel-body" style="color:red">' +
+                        v.price +'元'+
+                        ' </div> </div> </div>'
+            });
+            $('.server').html(serverHtml);
+            $('.server-modal').html(serverHtml);
+        }
+
+        //获取员工分类和信息列表
+        function getTechnicianList(){
+            $.post('/admin/technician/getLabelList',{},function(row){
+                if(row.code == 1 ) {
+                    var data = row.data;
+                    var thHtml = '';
+                    var trHtml = '';
+                    var staffHtml = '';
+                    var bgColor = new Array('yellow-bg','navy-bg','lazur-bg','red-bg');
+                    $('input[name=staffNumber]').val(data.length);
+                    $(data).each(function (i, v) {
+                        thHtml += '<th scope="col" colspan="2" class="txw1 staff-category" style="" data-id="' + v.id + '">' + v.name + '</th>';
+                        trHtml += '<td>工号</td><th scope="col" style="">业绩</th>';
+                        addHtml += '<td class="staff-select" data-type="0" data-toggle="modal" data-target="#staff" data-id="'+v.id+'"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
+                                '<td><input size="5" class="inp_sml_nolenth inp_c1" type="text" name="performance[]"  value="0"></td>'
+                        staffHtml += '<div class="staff-category-item"  data-id="'+v.id+'">'
+                        $(v.tList).each(function(ti,tv){
+                            staffHtml += '<div class="col-sm-3 staff-item" data-id="'+tv.id+'"> <div class="widget style1 '+bgColor[i]+'"> <div class="row vertical-align"> <div class="col-xs-3"> <i class="fa fa-user fa-3x"></i> </div> <div class="col-xs-9 text-right"><span class="font-bold col-xs-12">'+v.name+'</span> <span style="margin-top: 5px;" class="font-bold  col-xs-12">'+tv.name+'</span> </div> </div> </div> </div>'
+                        })
+                        staffHtml += '</div>'
+                    })
+
+                    $('.table-option').before(thHtml)
+                    $('.odd-item').append(trHtml);
+                    $('.del-tr').before(addHtml);
+                    $('.staff').append(staffHtml);
+                }
+            })
+        }
+
+        //显示服务拟态窗
+        $('body').on('click','.server-name',function(){
+            var id = $(this).attr('data-id');
+            $('.server-modal').attr('data-id',id);
+        })
+        //显示商品拟态窗
+        $('body').on('click','.goods-name',function(){
+            var id = $(this).attr('data-id');
+            $('.goods-modal').attr('data-id',id);
+        })
+
+        //显示员工拟态窗
+        $('body').on('click','.staff-select',function(){
+            var id = $(this).attr('data-id');
+            var type = $(this).attr('data-type');
+            if( type == 0 ){
+                var trId = $(this).parents('.server-data').attr('data-id');
+            }else{
+                var trId = $(this).parents('.goods-data').attr('data-id');
+            }
+            $('.staff').attr('data-id',trId);
+            $('.staff').attr('data-type',type);
+            $('.staff').attr('data-select-id',id);
+
+            if(id != 0 ){
+                $('.staff-category-item').each(function(){
+                    var itemId = $(this).attr('data-id');
+                    if(itemId != id ) {
+                        $(this).css('display', 'none');
+                    }else{
+                        $(this).css('display', 'block');
+                    }
+                })
+            }
+
+        })
+
+        //选择员工
+        $('body').on('click','.staff-item',function(){
+            var type = $(this).parents('.staff').attr('data-type');
+            //商品
+            if( type == 1 ){
+                var id = $(this).attr('data-id');
+                var selectId = $(this).parents('.staff').attr('data-select-id');
+                var trId = $(this).parents('.staff').attr('data-id');
+                //查询对应的tr数据
+                $('.goods-data').each(function(i,v){
+                    if( $(v).attr('data-id') == trId){
+                        $(v).find('.staff-select').each(function(si,sv){
+                            if( $(sv).attr('data-id') == selectId ){
+                                $(sv).find('.staff-id').text(id);
+                                $(sv).find('.staff-id-val').val(id);
+                            }
+                        })
+                    }
+                })
+            //服务
+            }else if(type == 0 ){
+                var id = $(this).attr('data-id');
+                var selectId = $(this).parents('.staff').attr('data-select-id');
+                var trId = $(this).parents('.staff').attr('data-id');
+                //查询对应的tr数据
+                $('.server-data').each(function(i,v){
+                    var price = $(v).find('.server-price-val').val();
+                    var sPrice = $(v).find('.server-s-price').val();
+                    if(sPrice != 0 ){
+                        price = sPrice;
+                    }
+                    var num = $(v).find('.server-num').val();
+                    var sum = price * num;
+                    if( $(v).attr('data-id') == trId){
+                        $(v).find('.staff-select').each(function(si,sv){
+                            if( $(sv).attr('data-id') == selectId ){
+                                $(sv).find('.staff-id').text(id);
+                                $(sv).find('.staff-id-val').val(id);
+                                $(sv).next().find('input[name=performance]').val(sum);
+                            }
+                        })
+                    }
+                })
+            }
+            $('#staff').modal('hide');
+        })
+
+        //选择项目
+        $('body').on('click','.server-info',function(){
+            var name = $(this).attr('data-name');
+            var id = $(this).attr('data-id');
+            var price = $(this).attr('data-price');
+            var trId = $('.server-data').length;
+            var trHtml =  ' <tr class="server-data"  data-id="'+trId+'"> ' +
+                    '<input type="hidden" class="server-tr" name="server[]" value="'+id+'"> ' +
+                    '<td class="select-server server-name"  data-id="'+trId+'" data-toggle="modal" data-target="#server-list">'+name+'</td> ' +
+                    '<td style=""><span class="server-price">'+price+'</span><input type="hidden" name="server-price[]" class="server-price-val" value="'+price+'"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]"></td>'+ addHtml +
+                    '<td  class="del-tr" style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
+                    '</tr>'
+            //判断是否是拟态窗中选择服务信息
+            if( $(this).parent().hasClass('server-modal') ){
+                var dataId = $('.server-modal').attr('data-id');
+                $('.server-data').each(function(i,v){
+                    var itemId = $(v).find('.server-name').attr('data-id');
+                    if(itemId == dataId ){
+                        $(v).find('.server-name').text(name);
+                        $(v).find('.server-price').text(price);
+                        $(v).find('.server-price-val').val(price);
+                        $(v).find('.server-tr').val(id);
+                    }
+                })
+                $('#server-list').modal('hide');
+                countSum();
+                return false;
+            }
+
+            //查询是否已经有数据栏
+            if($('.server-tr').length > 0 ){
+                var isEmpty = false;
+                $('.server-tr').each(function(i,v){
+                    if($(v).val() == ''){
+                        isEmpty = true;
+                        $(v).val(id);
+                        $(v).parent().find('.server-name').text(name);
+                        $(v).parent().find('.server-price').text(price);
+                        $(v).parent().find('.server-price-val').val(price);
+                        return false;
+                    }
+                })
+                if(!isEmpty){
+                    $(activeTab).find('.count').before(trHtml);
+                }
+            }else{
+                //没有则添加数据栏并填入数据
+                $(activeTab).find('.count').before(trHtml);
+            }
+            countSum();
+        })
+
+        //选择商品
+        $('body').on('click','.goods-info',function(){
+            var name = $(this).attr('data-name');
+            var id = $(this).attr('data-id');
+            var price = $(this).attr('data-price');
+            var trId = $('.goods-data').length;
+            var trHtml =  ' <tr class="goods-data"  data-id="'+trId+'"> ' +
+                   ' <input type="hidden" class="goods-tr" name="goods[]" value="'+id+'"> ' +
+                    '<td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list">'+name+'</td> ' +
+                    '<td><span class="goods-price">'+price+'</span><input type="hidden" name="goodsPrice[]" class="goods-price-val" value="'+price+'"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td> ' +
+                    '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
+                    '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>'
+                    '</tr>'
+            //判断是否是拟态窗中选择服务信息
+            if( $(this).parent().hasClass('goods-modal') ){
+                var dataId = $('.goods-modal').attr('data-id');
+                $('.goods-data').each(function(i,v){
+                    var itemId = $(v).find('.goods-name').attr('data-id');
+                    if(itemId == dataId ){
+
+                        $(v).find('.goods-name').text(name);
+                        $(v).find('.goods-price').text(price);
+                        $(v).find('.goods-price-val').val(price);
+                        $(v).find('.goods-tr').val(id);
+                    }
+                })
+                $('#goods-list').modal('hide');
+                goodsCountSum();
+                return false;
+            }
+
+            //查询是否已经有数据栏
+            if($('.goods-tr').length > 0 ){
+                var isEmpty = false;
+                $('.goods-tr').each(function(i,v){
+                    if($(v).val() == ''){
+                        isEmpty = true;
+                        $(v).val(id);
+                        $(v).parent().find('.goods-name').text(name);
+                        $(v).parent().find('.goods-price').text(price);
+                        $(v).parent().find('.goods-price-val').val(price);
+                        return false;
+                    }
+                })
+                if(!isEmpty){
+                    $(activeTab).find('.goods-count').before(trHtml);
+                }
+            }else{
+                //没有则添加数据栏并填入数据
+                $(activeTab).find('.goods-count').before(trHtml);
+            }
+
+            goodsCountSum();
+        })
+
+        //商品添加行
+        $('.goods-count').find('img').on('click',function(){
+            var id = $('.goods-data').length  ;
+            var html  = '  <tr class="goods-data" data-id="'+id+'"> ' +
+                    '<input type="hidden" class="goods-tr" name="goods[]" > ' +
+                    '<td class="select-goods goods-name" data-id="'+id+'"  data-toggle="modal" data-target="#goods-list"></td> ' +
+                    '<td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td> ' +
+                    '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
+                    '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
+                    '</tr>'
+            $(activeTab).find('.goods-count').before(html);
+        })
+
+        //当数量发生改变时重新计算
+        $('body').on('change','.server-num,.server-s-price',function(){
+            if($(this).parent().parents('tr').find('.server-tr').val() != ''){
+                countSum();
+            }
+        })
+
+        //当数量发生改变时重新计算
+        $('body').on('change','.goods-num,.goods-s-price',function(){
+            if($(this).parent().parents('tr').find('.goods-tr').val() != ''){
+                goodsCountSum();
+            }
+        })
+
+        //计算总价
+        function countSum(){
+            //原价
+            var money = 0;
+            var sMoney = 0;
+            var leng  = $('.server-data').length;
+            if(leng != 0 ){
+                $('.server-price').each(function(i,v) {
+                    var num = $(v).parents('tr').find('.server-num').val();
+                    var price = $(v).next().val();
+                    var sPrice = $(v).parents('tr').find('.server-s-price').val();
+                    //如果销最终销售价格填写的话 就以销最终销售价格为准
+                    if(sPrice != 0){
+                        sMoney  +=   accuracyMul(sPrice , num);
+                    }else{
+                        money  +=   accuracyMul(price , num);
+                    }
+                })
+            }
+            //会员折扣
+            if($('.user-id').val() != 0 ){
+                var rankDiscount = $('input[name=rank_discount]').val()/10;
+                if( rankDiscount != 0 ){
+                    //优惠的价格
+                    var discountPrice = money * rankDiscount;
+                    $('#discount_price').text('-'+ ( (money - discountPrice.toFixed(1))).toFixed(1) );
+                    $('#zhsy_xm').text(accuracyAdd(sMoney,discountPrice.toFixed(1)));
+                }else{
+                    $('#zhsy_xm').text(accuracyAdd(sMoney,money));
+                }
+                $('#o_price').text(accuracyAdd(sMoney,money));
+            }else{
+                $('#outher_zhsy_xm').text(accuracyAdd(sMoney,money));
+            }
+
+        }
+        //计算商品总价
+        function goodsCountSum(){
+            //原价
+            var money = 0;
+            var sMoney = 0;
+            var length  = $('.goods-data').length;
+            if(length != 0 ){
+                $('.goods-price').each(function(i,v) {
+                    var num = $(v).parents('tr').find('.goods-num').val();
+                    var price = $(v).next().val();
+                    var sPrice = $(v).parents('tr').find('.goods-s-price').val();
+                    //如果销最终销售价格填写的话 就以销最终销售价格为准
+                    if(sPrice != 0){
+                        sMoney  +=   accuracyMul(sPrice , num);
+                    }else{
+                        money  +=    accuracyMul(price , num);
+                    }
+                })
+            }
+            if($('.user-id').val() != 0 ){
+                //会员折扣
+                var rankDiscount = $('input[name=goods_rank_discount]').val()/10;
+                if(rankDiscount != 0 ){
+                    //优惠的价格
+                    var discountPrice = money * rankDiscount;
+                    $('#goods_discount_price').text('-'+ ( (money - discountPrice.toFixed(1))).toFixed(1) );
+                    $('#goods_zhsy_xm').text( accuracyAdd(sMoney,discountPrice.toFixed(1)));
+                }else{
+                    $('#goods_discount_price').text(0);
+                    $('#goods_zhsy_xm').text(accuracyAdd(sMoney,money));
+                }
+                $('#goods_o_price').text(accuracyAdd(sMoney,money));
+            }else{
+                $('#outher_goods_zhsy_xm').text(accuracyAdd(sMoney,money));
+
+            }
+
+        }
+        //结算
+        $('body').on('click','.submit-btn',function(){
+            var that = $(this);
+            var isTemporary = $('.temporary').hasClass('active');
+            layui.use('layer', function() { //独立版的layer无需执行这一句
+                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                if(isTemporary){
+                    if( that.attr('data-type') == 1 ){
+                        var money = $('#outher_goods_zhsy_xm').text();
+                    }else{
+                        var money = $('#outher_zhsy_xm').text();
+                    }
+                }else{
+                    if( that.attr('data-type') == 1 ){
+                        var money = $('#goods_zhsy_xm').text();
+                    }else{
+                        var money = $('#zhsy_xm').text();
+                    }
+                }
+                layer.confirm('结算金额'+money+'元', {
+                    btn: ['确认结算','取消'] //按钮
+                }, function(){
+                    var uId = $('.user-id').val();
+                    if( uId == 0 ){
+                        if(isTemporary){
+                            requestAjax(that);
+                            tableInit();
+                            goodsTableInit();
+                            countSum();
+                        }else{
+                            layer.msg('会员信息不能为空，收银失败!', {icon: 2});
+                        }
+                    }else{
+                        requestAjax(that);
+                        tableInit();
+                        goodsTableInit();
+                        countSum();
+                        getUserInfo();
+                    }
+                });
+
+            })
+        })
+        //充值
+        $('body').on('click','.submits-btn-submits-btn',function(){
+            var that = $(this);
+            requestAjax(that);
+        })
+        //新建用户
+        $('body').on('click','.submits-btn-new-user',function(){
+            var that = $(this);
+            requestAjax(that);
+        })
+        //Ajax请求
+        function requestAjax(that){
+            layui.use('layer', function() { //独立版的layer无需执行这一句
+                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                //结算请求
+                var from = that.parents('.ajax-from')[0];
+                var data = that.parents('.ajax-from').serialize();
+                $.ajax({
+                    url: from.action,
+                    type: from.method,
+                    data: data,
+                    success: function (info) {
+                        if (info.code == 1) {
+                            layer.msg(info.msg, {icon: 1});
+                            getUserInfo();
+                        } else {
+                            layer.msg(info.msg, {icon: 2});
+                        }
+                    }
+                });
+            })
+        }
+        //高精度计算 （加法）
+        function accuracyAdd(firstNumber,lastNumber){
+            var num1,num2,m;
+            try{num1=firstNumber.toString().split(".")[1].length}catch(e){num1=0};
+            try{num2=lastNumber.toString().split(".")[1].length}catch(e){num2=0};
+            m=Math.pow(10,Math.max(num1,num2));
+            return (firstNumber*m+lastNumber*m)/m;
+        }
+
+        function accuracyMul(arg1,arg2) {
+            var m=0,s1=arg1.toString(),s2=arg2.toString();
+            try{m+=s1.split(".")[1].length}catch(e){}
+            try{m+=s2.split(".")[1].length}catch(e){}
+            return  Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)
+
+        }
     })
+
+
 </script>
 </body>
 </html>

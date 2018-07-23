@@ -39,8 +39,6 @@ class System extends AdminBase
                     unset($site_config[$k]);
                 }
             }
-//            $site_config['x_inform'] = json_encode($site_config['x_inform']);
-
             if (Db::name('system')->where(['s_id'=>1])->update($site_config) !== false) {
                 $this->success('提交成功');
             } else {

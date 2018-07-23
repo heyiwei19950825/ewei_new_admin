@@ -71,6 +71,9 @@ class Goods extends AdminBase
     {
         $map = $goods_list = [];
         $field = 'g.id,g.s_id,g.name,g.cid,g.thumb,g.is_recommend,g.status,g.is_hot,g.is_top,g.sort,g.sp_price,g.sp_inventory,g.sp_market,g.publish_time,g.etime,c.name as cname,g.royalty_template,g.royalty_type,g.royalty';
+        if( $this->request->isPost()){
+            $map['status'] = 1;
+        }
 
         if ($cid > 0) {
             $category_children_ids = $this->category_model->where(['path' => ['like', "%,{$cid},%"]])->column('id');
@@ -89,12 +92,17 @@ class Goods extends AdminBase
             ->field($field)->order('s_id asc,sort desc')->select();
         foreach ($goods_list as $k=> &$v){
             if( $v['royalty_type'] == 0 ){
-                $vt = Db::name('royalties_template')->where(['id'=>$v['royalty_template'],'status'=>1,'s_id'=>$this->admin_id])->find();
-                if( $vt['type'] ==  1 ){
-                    $v['royalties'] = $vt['name'].' 【'.$vt['royalties'].'元'.'】';
-                }else if( $vt['type'] ==  2){
-                    $v['royalties'] = $vt['name'].' 【'.$vt['royalties'].'%'.'】';
+                if($v['royalty_template'] == 0 ){
+                    $v['royalties'] = '暂无提成';
+                }else{
+                    $vt = Db::name('royalties_template')->where(['id'=>$v['royalty_template'],'status'=>1,'s_id'=>$this->admin_id])->find();
+                    if( $vt['type'] ==  1 ){
+                        $v['royalties'] = $vt['name'].' 【'.$vt['royalties'].'元'.'】';
+                    }else if( $vt['type'] ==  2){
+                        $v['royalties'] = $vt['name'].' 【'.$vt['royalties'].'%'.'】';
+                    }
                 }
+
             }else{
                 if(  $v['royalty'] != 0){
                     //固定金额
@@ -108,7 +116,11 @@ class Goods extends AdminBase
                 }
             }
         }
-        return $this->fetch('index', ['goods_list' => $goods_list, 'cid' => $cid, 'keyword' => $keyword]);
+        if( $this->request->isPost()){
+            return $this->success('查询成功','',$goods_list);
+        }else{
+            return $this->fetch('index', ['goods_list' => $goods_list, 'cid' => $cid, 'keyword' => $keyword]);
+        }
     }
 
     /**

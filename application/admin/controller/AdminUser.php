@@ -40,7 +40,7 @@ class AdminUser extends AdminBase
     public function index()
     {
         $ids = [];
-        $field = 's.shop_name,s.shop_logo,s.shop_phone,u.audit,s.shop_account,s.shop_integral,s.shop_shopowner,s.live_store_address,s.brief,.s.shop_create_time,s.audit_note,s.shop_status,u.username,u.id,u.create_time,u.status';
+        $field = 's.shop_name,s.shop_logo,s.shop_phone,u.audit,s.shop_account,s.note,s.shop_integral,s.shop_shopowner,s.live_store_address,s.brief,.s.shop_create_time,s.audit_note,s.shop_status,u.username,u.id,u.create_time,u.status';
         $admin_user_ids  = $this->auth_group_access_model->where(['group_id' => 2])->select();
         foreach($admin_user_ids as $v){
             $ids[] = $v['uid'];
@@ -198,6 +198,9 @@ class AdminUser extends AdminBase
         }
     }
 
+    /**
+     * 验证 密码
+     */
     public function passAffirm( ){
         if( $this->request->isPost()){
             $pass = $this->request->param('password');
@@ -208,6 +211,29 @@ class AdminUser extends AdminBase
             }else{
                 $this->error('密码错误');
             }
+        }
+    }
+
+    /**
+     * 短信充值
+     */
+    public function rechargeNote(){
+        if($this->request->isPost()){
+            $params = $this->request->param();
+            $id = $number = 0;
+            extract($params);
+            //验证
+            if( empty($id) || empty($number) ){
+                $this->error('参数错误');
+            }
+            if($this->shop_model->where(['u_id'=>$id])->setInc('note',$number)){
+                $this->shop_model->where(['u_id'=>1])->setDec('note',$number);
+                $this->success('操作成功');
+            } else {
+                $this->error('操作失败');
+            }
+        }else{
+            $this->error('错误的请求方式');
         }
     }
 }

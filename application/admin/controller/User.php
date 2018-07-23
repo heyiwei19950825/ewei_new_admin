@@ -1,16 +1,20 @@
 <?php
 namespace app\admin\controller;
 
+use app\common\model\Goods;
+use app\common\model\Technician;
 use app\common\model\User as UserModel;
 use app\common\controller\AdminBase;
 use app\common\model\UserDeal;
 use app\common\model\VoucherOrder;
 use org\ExcelToArrary;
+use org\SendSms;
 use think\Config;
 use think\Db;
 use app\common\model\UserRank;
-use PHPExcel;
+use app\common\model\ServerProject as ServerProjectModel;
 
+use PHPExcel;
 use PHPExcel_IOFactory;
 /**
  * 用户管理
@@ -22,7 +26,10 @@ class User extends AdminBase
     protected $user_model;
     protected $rank_model;
     protected $deal_model;
+    protected $server_model;
     protected $voucher_order_model;
+    protected $technician_model;
+    protected $goods_model;
 
     protected function _initialize()
     {
@@ -30,6 +37,9 @@ class User extends AdminBase
         $this->user_model = new UserModel();
         $this->rank_model = new UserRank();
         $this->deal_model = new UserDeal();
+        $this->server_model = new ServerProjectModel();
+        $this->goods_model = new Goods();
+        $this->technician_model = new Technician();
         $this->voucher_order_model = new VoucherOrder();
     }
 
@@ -80,10 +90,10 @@ class User extends AdminBase
             if ($validate_result !== true) {
                 $this->error($validate_result);
             } else {
-//                //默认头像
-//                if( empty($data['portrait']) ){
-//                    $data['portrait'] = $data['sex'] == 1? '/public/static_new/img/user/male.jpg' : '/public/static_new/img/user/female.jpg';
-//                }
+                //默认头像
+                if( empty($data['portrait']) ){
+                    $data['portrait'] = $data['sex'] == 1? '/public/static_new/img/user/male.jpg' : '/public/static_new/img/user/female.jpg';
+                }
                 $data['password'] = md5($data['password'] . Config::get('salt'));
 
                 if ( $this->user_model->allowField(true)->save($data) ) {
@@ -253,17 +263,47 @@ class User extends AdminBase
     }
 
     /**
+     * 退卡
+     * @param $id
+     */
+    public function manageBack( $id ){
+        $userInfo = $this->user_model->getUserInfo(['id'=>$id,'s_id'=>$this->admin_id],'balance');
+
+        //修改用户信息
+        $this->user_model->where([
+            's_id' => $this->admin_id,
+            'id'   => $id
+        ])->update([
+            'rank_id' =>0,
+            'balance' =>0,
+            'give_balance' =>0,
+            'integral' =>0,
+        ]);
+
+        //添加收支记录
+        $paymentsData = array(
+            'money' =>$userInfo['balance'],
+            'type'  => 0,
+            'time'  => date('Y-m-d H:i:s',time()),
+            'describe' => '用户退卡',
+            's_id' =>$this->admin_id
+        );
+        Db::name('shop_payments')->insert($paymentsData);
+        //修改商家金额
+
+
+        $this->success('退卡成功');
+    }
+
+    /**
      * 获取用户详情
      * @param $id
      * @return \think\response\Json
      */
     public function getUserInfo($id){
-        $userInfo = $this->user_model->field('username,mobile,id,balance,integral,portrait,rank_id')->where(['id'=>$id,'s_id'=>$this->admin_id])->find();
+        $userInfo = $this->user_model->getUserInfo(['id'=>$id,'s_id'=>$this->admin_id],'username,mobile,id,balance,integral,portrait,rank_id');
         if(!empty($userInfo)){
-            $userInfo = $userInfo->toArray();
-
-            $userInfo['rank'] = $this->rank_model->field('name,discount')->where(['id'=>$userInfo['rank_id'],'s_id'=>$this->admin_id])->find()->toArray();
-
+            $userInfo['rank'] = $this->rank_model->getRankInfo(['id'=>$userInfo['rank_id'],'s_id'=>$this->admin_id],'name,discount');
         }
 
         return json(['data'=>$userInfo,'code'=>1,'message'=>'操作完成']);
@@ -274,16 +314,16 @@ class User extends AdminBase
      * @return \think\response\Json
      */
     public function search(){
-            $ids = UserRank::getRankIds(['s_id'=>$this->admin_id]);
+        $ids = UserRank::getRankIds(['s_id'=>$this->admin_id]);
 
-            $user = $this->user_model
-                ->field('username,mobile,id')
-                ->where([
-                    's_id'=>$this->admin_id,
-                    'rank_id' => ['in',$ids]
-                ])
-                ->select();
-            return json(['data'=>$user,'code'=>1,'message'=>'操作完成']);
+        $user = $this->user_model
+            ->field('username,mobile,id')
+            ->where([
+                's_id'=>$this->admin_id,
+                'rank_id' => ['in',$ids]
+            ])
+            ->select();
+        return json(['data'=>$user,'code'=>1,'message'=>'操作完成']);
     }
 
 
@@ -293,53 +333,260 @@ class User extends AdminBase
     public function deal()
     {
         if ($this->request->isPost()) {
-
             $params = $this->request->param();
-            if (empty($params['u_id'])) {
+            //type 判断是会员消费还是散客消费
+            $server = $u_id = $serverSPrice = $staffId = $performance = $staffNumber = $serverNumber = $isDiscount = $type  =0;
+            extract($params);
+
+            if (empty($u_id) && $type == 0 ) {
                 return $this->error('请选择用户');
             }
-            if (empty($params['money'])) {
-                return $this->error('请填写消费金额');
-            }
-            $user = $this->user_model->where(['id' => $params['u_id']])->find();
-            if (empty($user)) {
-                return $this->error('用户不存在');
+
+            if (empty($server) || empty($server[0])) {
+                return $this->error('请选择消费项目');
             }
 
-            //会员优惠 折扣
-            $rank = $this->rank_model->where([
-                'id' => $user['rank_id'],
-                's_id'=>$this->admin_id
-            ])->find();
-            if (empty($rank)) {
-                return $this->error('网络异常');
+            if($type == 0){
+                //用户信息
+                $user = $this->user_model->getUserInfo(['id' => $u_id],'id,rank_id,balance,mobile');
+                $user['rank'] = $this->rank_model->getRankInfo(['id'=>$user['rank_id'],'s_id'=>$this->admin_id],'name,discount');
+
+                if (empty($user)) {
+                    return $this->error('用户不存在');
+                }
+            }
+            //查询对应的服务列表
+            $serverIds = implode(',',$server);
+            $serverList = $this->server_model->getList(['id'=>['in',$serverIds]]);
+            $newServerList = [];
+            foreach($serverList as $k => $v){
+                $newServerList[$v['id']] = $v;
             }
 
-            $discount = $rank['discount'] / 10;
-            if ($discount != 0) {
-                $params['money'] = $params['money'] * $discount;
-            }
-            //优先使用自定义价格
-            if($params['deal_discount'] != 0 ){
-                $params['money'] = $params['deal_discount'];
+            $sumMoney = 0;
+            $sSumMoney = 0;
+            //计算价格
+            foreach ($server as $k=> $v){
+                if($serverSPrice[$k] != 0 ){
+                    $sSumMoney += (float)$serverSPrice[$k] * (float)$serverNumber[$k];
+                }else{
+                    $sumMoney += (float)$newServerList[$v]['price'] * (float)$serverNumber[$k];
+                }
             }
 
-            if ($params['money'] > $user['balance']) {
-                return $this->error('用户余额不足');
+            $balance = 0;
+            if( $type == 0  ) {
+                if ($user['rank']['discount'] > 0 && $this->shopConfig['is_discount'] == 1) {
+                    //计算用户的会员折扣
+                    $sumMoney = round($sumMoney * ($user['rank']['discount'] / 10), 1);//保留一位小数
+                    $isDiscount = 1;
+                }
+                $sumMoney += $sSumMoney;
+
+                //检测余额
+                if ($sumMoney > $user['balance']) {
+                    return $this->error('用户余额不足');
+                }
+
+                $balance =  $user['balance'] - $sumMoney;
             }
+
+
+
+            if ($sumMoney < 0) {
+                return $this->error('错误的请求');
+            }
+
             //添加商户金额
             Db::name('shop')->where([
                 'u_id' => $this->admin_id
-            ])->setDec('shop_account',($params['money']) );
+            ])->setDec('shop_account', ($sumMoney));
 
-            $params['type'] = 0;
-            $params['remark'] = empty($params['remark']) ? '用户到店消费' : $params['remark'];
-            $row = $this->deal_model->deal($params,$this->admin_id);
+            //购买记录日志添加
+            $number = 0;
+            foreach ($server as $k=> $v){
+                if($serverSPrice[$k] != 0 ){
+                    $price = (float)$serverSPrice[$k] * (float)$serverNumber[$k];
+                }else{
+                    $price = (float)$newServerList[$v]['price'] * (float)$serverNumber[$k];
+                }
+                if($isDiscount == 1 && $type == 0 ){
+                    $params['money'] = $params['serverSPrice'][$k] == 0 ?round($price * ($user['rank']['discount'] /10 ),1)  :$params['serverSPrice'][$k] * $serverNumber[$k];
+                }else{
+                    $params['money']  = $params['serverSPrice'][$k] == 0 ?$price:$params['serverSPrice'][$k] * $serverNumber[$k];
+                }
+                //添加日志
+                $params['type'] = 0;
+                $params['is_discount'] = $isDiscount;
+
+                if( $type == 0 ){
+                    $params['describe'] = $newServerList[$v]['name'].'X'.$serverNumber[$k] ;
+                }else{
+                    $params['describe'] ='散客消费 '.$newServerList[$v]['name'].'X'.$serverNumber[$k] ;
+                }
+
+                $this->deal_model->deal($params,$this->admin_id);
+
+                //员工绩效
+                $staffLength = count($staffId);
+                for ($i=0;$i<$staffLength;$i++){
+                    if($i>= $number){
+                        if($performance[$i] != 0  && $staffId[$i] != 0 ){
+                            $tInfo = $this->technician_model->getInfo(['id'=>$staffId[$i],'s_id'=>$this->admin_id]);
+                            if( empty($tInfo)){
+                                continue;
+                            }
+                            $data = [
+                                't_id' => $staffId[$i],
+                                't_name' => $tInfo['name'],
+                                's_id'   => $v,
+                                's_name' => $newServerList[$v]['name'],
+                                's_price' => $newServerList[$v]['price'],
+                                'performance' => $performance[$i],
+                                'type'    => 0,
+                                'time' => date('Y-m-d H:i:s',time()),
+                                'shop_id' => $this->admin_id,
+                                'u_id' =>$u_id
+                            ];
+                            Db::name('technician_performance')->insert($data);
+                        }
+                    }
+
+                }
+            }
+            //发送短信通知
+            if(in_array('consumption',json_decode($this->shopConfig['note_config'],true)) && $this->shopConfig['note'] > 0  && $type == 0  ){
+                ( new SendSms())->sendByTemplateId($user['mobile'],156835,[$this->shopConfig['shop_name'],$sumMoney.'元',$balance.'元'],$this->admin_id);
+            }
+
+            return $this->success('操作成功');
+        }
+    }
+
+    /**
+     * 会员消费【商品】
+     */
+    public function goodsDeal(){
+        if ($this->request->isPost()) {
+            $params = $this->request->param();
+            //type 判断是会员消费还是散客消费
+            $u_id = $goods = $goodsPrice = $goodsNum = $goodsSPrice = $staffId = $type = $isDiscount = 0;
+            extract($params);
+            if($type == 0 ){
+                if (empty($u_id)) {
+                    return $this->error('请选择用户');
+                }
+            }
+
+            if (empty($goods) || empty($goods[0]) ) {
+                return $this->error('请选择消费商品');
+            }
+            if($type == 0 ) {
+                //用户信息
+                $user = $this->user_model->getUserInfo(['id' => $u_id], 'id,rank_id,balance,mobile');
+                $user['rank'] = $this->rank_model->getRankInfo(['id' => $user['rank_id'], 's_id' => $this->admin_id], 'name,discount');
+                if (empty($user)) {
+                    return $this->error('用户不存在');
+                }
+            }
+
+            //查询对应的服务列表
+            $goodsIds = implode(',',$goods);
+            $goodsList = $this->goods_model->getGoodsList(['id'=>['in',$goodsIds]],false,0,0,'name,sp_price,id');
+
+            $newGoodsList = [];
+            foreach($goodsList as $k => $v){
+                $newGoodsList[$v['id']] = $v;
+            }
+            $sumMoney = 0;
+            $sSumMoney =0;
+            //计算价格
+            foreach ($goods as $k=> $v){
+                if($goodsSPrice[$k] != 0 ){
+                    $sSumMoney += (int)$goodsSPrice[$k] * (int)$goodsNum[$k];
+                }else{
+                    $sumMoney += (int)$newGoodsList[$v]['sp_price'] * (int)$goodsNum[$k];
+                }
+
+
+            }
+
+            if( $type == 0 ){
+                if($user['rank']['discount'] > 0 && $this->shopConfig['is_discount'] == 1 ){
+                    //计算用户的会员折扣
+                    $sumMoney = round($sumMoney * ($user['rank']['discount'] /10),1);//保留一位小数
+                    $isDiscount = 1;
+                }
+
+                $sumMoney += $sSumMoney;
+
+                //检测余额
+                if ($sumMoney > $user['balance']) {
+                    return $this->error('用户余额不足');
+                }
+
+
+                $balance = $user['balance'] - $sumMoney;
+
+            }
+
+            if($sumMoney < 0 ){
+                return $this->error('错误的请求');
+            }
+
+
+            //添加商户金额
+            Db::name('shop')->where([
+                'u_id' => $this->admin_id
+            ])->setDec('shop_account',($sumMoney) );
+            //购买记录日志添加
+            foreach ($goods as $k=> $v){
+                if($goodsSPrice[$k] != 0 ){
+                    $price = (int)$goodsSPrice[$k] * (int)$goodsNum[$k];
+                }else{
+                    $price = (int)$newGoodsList[$v]['sp_price'] * (int)$goodsNum[$k];
+                }
+                if($isDiscount == 1 && $type == 0 ){
+                    $params['money'] = $goodsSPrice[$k] == 0 ?round($price * ($user['rank']['discount'] /10 ),1)  :$goodsSPrice[$k] * $goodsNum[$k];
+                }else{
+                    $params['money']  = $goodsSPrice[$k] == 0 ?$price:$goodsSPrice[$k] * $goodsNum[$k];
+                }
+                //添加日志
+                $params['type'] = 0;
+                $params['is_discount'] = $isDiscount;
+                if($type == 0 ){
+                    $params['describe'] ='购买'.$newGoodsList[$v]['name'].'X'.$goodsNum[$k] ;
+                }else{
+                    $params['describe'] ='散客购买'.$newGoodsList[$v]['name'].'X'.$goodsNum[$k];
+                }
+                $row = $this->deal_model->deal($params,$this->admin_id);
+                if($staffId[$k] != 0 ){
+                    $tInfo = $this->technician_model->getInfo(['id'=>$staffId[$k],'s_id'=>$this->admin_id]);
+                    $performance = Goods::goodsPerformance($v,$this->admin_id);
+                    //员工绩效
+                    $data = [
+                        't_id' => $staffId[$k],
+                        't_name' => $tInfo['name'],
+                        's_id'   => $v,
+                        's_name' => $newGoodsList[$v]['name'],
+                        's_price' => $newGoodsList[$v]['sp_price'],
+                        'performance' => $performance,
+                        'type'    => 1,
+                        'time' => date('Y-m-d H:i:s',time()),
+                        'shop_id' => $this->admin_id,
+                        'u_id' =>$u_id
+                    ];
+                    Db::name('technician_performance')->insert($data);
+                }
+            }
+            //发送短信通知
+            if(in_array('consumption',json_decode($this->shopConfig['note_config'],true)) && $this->shopConfig['note'] > 0  && $type == 0  ){
+                ( new SendSms())->sendByTemplateId($user['mobile'],156835,[$this->shopConfig['shop_name'],$sumMoney.'元',$balance.'元'],$this->admin_id);
+            }
 
             return $this->success('操作成功', '', $row);
         }
     }
-
     /**
      * 会员充值
      */
@@ -358,8 +605,8 @@ class User extends AdminBase
             if(empty($params['give_money']) ){
                 $params['give_money'] = 0;
             }
-
             $user = $this->user_model->where(['id' => $params['u_id'],'s_id'=>$this->admin_id])->find();
+
             if (empty($user)) {
                 return $this->error('用户不存在');
             }
@@ -402,8 +649,12 @@ class User extends AdminBase
             Db::name('shop')->where([
                 'u_id' => $this->admin_id
             ])->setInc('shop_integral',($params['give_integral']) );
+            $balance =$this->user_model->where(['id'=>$params['u_id']])->find()['balance'];
 
-
+            //发送短信通知
+            if(in_array('recharge',json_decode($this->shopConfig['note_config']),true) && $this->shopConfig['note'] > 0  ){
+                ( new SendSms())->sendByTemplateId($user['mobile'],156836,[$this->shopConfig['shop_name'],$params['money'].'元',$balance.'元'],$this->admin_id);
+            }
             if($row){
                 return $this->success('操作成功');
             }else{
@@ -481,8 +732,13 @@ class User extends AdminBase
             $ExcelToArrary = new ExcelToArrary();//实例化
             $res=$ExcelToArrary->read($savePath.$file_name,"UTF-8",$file_type);//传参,判断office2007还是office2003
             $data = [];
+            unset($res[1]);
+            unset($res[2]);
             /*对生成的数组进行数据库的写入*/
             foreach ($res as $k => $v) {
+                if($v[0] == ''){
+                    continue;
+                }
                 if ($k > 1) {
                     $data[$k]['s_id'] = $this->admin_id;
                     $data[$k]['username'] = $v[0];
@@ -516,6 +772,54 @@ class User extends AdminBase
 
         }
 
+    }
+
+    /**
+     * 自定义消费金额
+     */
+    public function customize(){
+        if( $this->request->isPost()){
+            $params = $this->request->param();
+            $u_id = $money = $remark = 0;
+            extract($params);
+            if( $money == 0 ){
+                return $this->error('请填写消费金额');
+            }
+            if($u_id == 0 ){
+                return $this->error('请选择消费用户');
+            }
+
+            //用户信息
+            $user = $this->user_model->getUserInfo(['id' => $u_id], 'id,rank_id,balance,mobile');
+            if (empty($user)) {
+                return $this->error('用户不存在');
+            }
+            //检测余额
+            if ($money > $user['balance']) {
+                return $this->error('用户余额不足');
+            }
+            $remark = empty($remark)?'自定义消费':$remark;
+            $params = [
+                'u_id' =>$u_id,
+                'type' =>0,
+                'describe' =>'',
+                'remark' =>$remark,
+                'money' =>$money,
+                'is_discount' =>0,
+            ];
+
+            $row = $this->deal_model->deal($params,$this->admin_id);
+            $balance = $user['balance'] - $money;
+            if($row ){
+                //发送短信通知
+                if(in_array('consumption',json_decode($this->shopConfig['note_config'],true)) && $this->shopConfig['note'] > 0  ){
+                    ( new SendSms())->sendByTemplateId($user['mobile'],156835,[$this->shopConfig['shop_name'],$money.'元',$balance.'元'],$this->admin_id);
+                }
+                return $this->success('消费成功');
+            }else{
+                return $this->error('网络异常');
+            }
+        }
     }
 
 }

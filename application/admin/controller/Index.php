@@ -133,7 +133,7 @@ class Index extends AdminBase
                 'sum'  =>  $userRechargeModel->sum('price')
             ];
         }
-            //按照天查询订单数量
+        //按照天查询订单数量
         $daysSql = 'select DATE_FORMAT(time,\'%Y%m%d\') days,count(id) count from os_book '.$groupWhere.'  group by days ';
         $daysSumSql = 'select DATE_FORMAT(time,\'%Y%m%d\') days,sum(price) count from os_book '.$groupWhere.'  group by days ';
         $statistics['book_days']['count'] =  Db::query($daysSql);
@@ -161,7 +161,7 @@ class Index extends AdminBase
             $statistics['countBalance'] += ($v['balance']*100);
         }
         $statistics['countBalance'] =  $statistics['countBalance'] /100;
-
+        $statistics['shop_detail'] = Db::name('shop')->where(['u_id'=>$this->admin_id])->find();
         return $this->fetch('index', ['statistics' => $statistics]);
     }
 }

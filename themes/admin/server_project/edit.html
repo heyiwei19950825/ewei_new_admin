@@ -104,6 +104,40 @@
                                 <span class="help-block m-b-none">正品保障,极速发货,7天退换货。多个请使用英文逗号,分隔</span>
                             </div>
                         </div>
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-2 control-label"><span>*</span> 提成</label>-->
+                            <!--<div class="col-sm-20" >-->
+                                <!--<div class="radio i-checks"  style="display:inline;">-->
+                                    <!--<label>-->
+                                        <!--<input type="radio" value="0" name="royalty_type" {if condition="$goods.royalty_type==0"} checked="checked"{/if}> <i></i>提成模板</label>-->
+                                <!--</div>-->
+                                <!--<div class="radio i-checks" style="display:inline;">-->
+                                    <!--<label>-->
+                                        <!--<input type="radio" value="1" name="royalty_type" {if condition="$goods.royalty_type==1"} checked="checked"{/if}> <i></i>固定</label>-->
+                                <!--</div>-->
+                                <!--<div class="radio i-checks"  style="display:inline;">-->
+                                    <!--<label>-->
+                                        <!--<input type="radio" value="2" name="royalty_type" {if condition="$goods.royalty_type==2"} checked="checked"{/if}> <i></i>百分比</label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div class="col-sm-5" style="margin-top: 30px;">-->
+                                <!--<div  class="input-group template" style="width:34vw; {if condition='$goods.royalty_type!=0'} display: none"{/if}">-->
+                                <!--<select class="form-control" name="royalty_template">-->
+                                    <!--<option value="0">请选择</option>-->
+                                    <!--{foreach name="royalty_template" item="vo"}-->
+                                    <!--<option value="{$vo.id}" {if condition="$goods.royalty_template==$vo.id"} selected {/if}>{$vo.name}</option>-->
+                                    <!--{/foreach}-->
+                                <!--</select>-->
+                            <!--</div>-->
+                            <!--<div class="input-group m-b royalty_type" style="{if condition='$goods.royalty_type==0'} display: none"{/if}">-->
+                            <!--<input type="number" class="form-control" name="royalty" value="{$goods.royalty}">-->
+                            <!--<span class="input-group-addon fixation" {if condition="$goods.royalty_type==2"} style="display: none" {/if}>元 </span>-->
+                            <!--<span class="input-group-addon percentage" {if condition="$goods.royalty_type==1"} style="display: none" {/if}>% </span>-->
+                        <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">内容</label>
@@ -198,6 +232,24 @@
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
+        });
+        $("input:radio[name='royalty_type']").on('ifChecked', function(event){
+            var v = $(this).val();
+            if( v == 1 ){
+                $('.percentage').css('display','none');
+                $('.template').css('display','none');
+                $('.royalty_type').css('display','');
+                $('.fixation').css('display','');
+
+            }else if( v== 2 ){
+                $('.fixation').css('display','none');
+                $('.template').css('display','none');
+                $('.royalty_type').css('display','');
+                $('.percentage').css('display','');
+            }else if( v == 0 ){
+                $('.royalty_type').css('display','none');
+                $('.template').css('display','');
+            }
         });
     });
 </script>

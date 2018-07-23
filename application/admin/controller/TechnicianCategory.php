@@ -145,5 +145,56 @@ class TechnicianCategory extends AdminBase
                 $this->error('操作错误');
             }
     }
+    /**
+     * 标记为结算表单
+     */
+
+    public function isForm( $id ){
+        $infoRow = $this->technician_category_model->where([
+            'id' => $id,
+            's_id' => $this->admin_id
+        ])->find();
+
+        //取消或标记
+        if($infoRow['is_form'] == 0 ){
+            $count = $this->technician_category_model->where([
+                's_id'=>$this->admin_id,
+                'is_form' => 1
+            ])->count();
+            if($count >= 3){
+                $this->error('最多选择3个');
+            }
+        }
+
+        $label = $infoRow['is_form'] == 0 ? 1:0;
+
+        //修改为技师分类
+        $row = $this->technician_category_model->where([
+            'id' => $id,
+            's_id' => $this->admin_id
+        ])->update([
+            'is_form' => $label
+        ]);
+
+        if( $row ){
+            $this->success('标记成功');
+        }else{
+            $this->error('操作错误');
+        }
+    }
+
+
+    public function getLabelCategory(){
+        if( !$this->request->isPost()){
+            return false;
+        }
+
+
+        if( $row ){
+            $this->success('查询成功','',$row);
+        }else{
+            $this->error('暂无数据，请先添加或选择标记员工分类');
+        }
+    }
 
 }

@@ -59,12 +59,17 @@
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="index.html#" style="color:red">
-                                我的二维码
+                                联系我们
                             </a>
-                            <ul class="dropdown-menu dropdown-messages book-msg" style="width:150px;text-align: center">
+                            <ul class="dropdown-menu dropdown-messages" style="width:150px;text-align: center">
                                 <li>
-                                    <span>我的店铺二维码</span>
-                                    <img src="__STATIC__/img/wx_logo.jpg" alt="" style="width:100px;">
+                                    <img src="{$system.sys_rcode}" alt="" style="width:100px;">
+                                </li>
+                                <li>
+                                    联系电话：{$system.sys_phone}
+                                </li>
+                                <li>
+                                    微信号：{$system.sys_wechat}
                                 </li>
                             </ul>
                         </li>

@@ -22,6 +22,7 @@ class UserRank extends Model
     /**
      * 获取商家用户的级别分类ID
      * @param $map
+     * @return array
      */
     static function getRankIds($map){
         //查询对应的会员等级
@@ -34,5 +35,24 @@ class UserRank extends Model
         }
 
         return $ids;
+    }
+
+    /**
+     * 获取会员等级详情
+     * @param $params
+     * @param string $field
+     * @return array|false|\PDOStatement|string|\think\Collection|Model
+     */
+    public function getRankInfo($params,$field=''){
+        if( empty($params['id']) ){
+            return false;
+        }
+        if( is_array($params['id'])){
+            $userRank = Db::name('user_rank')->field($field)->where($params)->select();
+        }else{
+            $userRank = Db::name('user_rank')->field($field)->where($params)->find();
+        }
+
+        return $userRank;
     }
 }

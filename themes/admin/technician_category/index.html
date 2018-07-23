@@ -38,7 +38,8 @@
                             <th>排序</th>
                             <th>分类名称</th>
                             <th>图标</th>
-                            <th>技师分类</th>
+                            <th>技师标记</th>
+                            <th>结算标记</th>
                             <th>状态</th>
                             <th>操作</th>
                         </tr>
@@ -51,9 +52,15 @@
                             <td>{$vo.name}</td>
                             <td><img src="{$vo.pic_url}" alt="" style="width: 50px;"></td>
                             <td>{php}echo $vo['is_technician']==1 ? '<span class="btn btn-primary dim">是</span>' : '<span class="btn dim btn-warning">否</span>';{/php}</td>
+                            <td>{php}echo $vo['is_form']==1 ? '<span class="btn btn-primary dim">是</span>' : '<span class="btn dim btn-warning">否</span>';{/php}</td>
                             <td>{php}echo $vo['status']==1 ? '显示' : '隐藏';{/php}</td>
                             <td class="center" style="width: 250px;" >
-                                <a type="button" class="btn btn-success" href="{:url('admin/technician_category/isTechnician',['id'=>$vo['id']])}">技师分类</a>
+                                <a type="button" class="btn btn-primary" href="{:url('admin/technician_category/isTechnician',['id'=>$vo['id']])}">技师标记</a>
+                                {if $vo['is_form'] == 1 }
+                                <a type="button" class="btn btn-warning" href="{:url('admin/technician_category/isForm',['id'=>$vo['id']])}">取消结算标记</a>
+                                {else}
+                                <a type="button" class="btn btn-success" href="{:url('admin/technician_category/isForm',['id'=>$vo['id']])}">结算标记</a>
+                                {/if}
                                 <a type="button" class="btn btn-info" href="{:url('admin/technician_category/edit',['id'=>$vo['id']])}">编辑</a>
                                 <a type="button" class="btn btn-danger" href="{:url('admin/technician_category/delete',['id'=>$vo['id']])}">删除</a>
                             </td>

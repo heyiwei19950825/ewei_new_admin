@@ -172,7 +172,7 @@ class Shop extends BaseController
                 's_id'=>$id
             ])->order('sort desc')->select();
         $info['shop_banner']  = self::prefixDomainToArray('image',$banner);
-
+        $info['x_article_href'] = Db::name('system')->field('x_article_href')->find()['x_article_href'];
         Db::name('statistics')->where(['s_id'=>$id])->setInc('visit');
         return [
             'code' => 0,

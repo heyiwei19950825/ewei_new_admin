@@ -14,14 +14,20 @@ use think\Model;
 
 class Technician extends  Model
 {
-    public function  getList($params){
-        $projectList = Db::name('technician')->field('name,c_id,id,price')->where('')->select();
+    public function  getList($params,$field='name,c_id,id,price'){
+        $projectList = Db::name('technician')->field($field)->where($params)->select();
 
         return $projectList;
     }
 
-    public function  getInfo($params){
-        $projectList = Db::name('technician')->field('name,c_id,id,price')->where(['id'=>$params['id']])->find();
+    /**
+     * 查询员工信息
+     * @param $params
+     * @param string $field
+     * @return array|false|\PDOStatement|string|Model
+     */
+    public function  getInfo($params,$field ='name,c_id,id,price'){
+        $projectList = Db::name('technician')->field($field)->where(['id'=>$params['id']])->find();
 
         return $projectList;
     }

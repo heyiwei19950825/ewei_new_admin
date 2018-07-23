@@ -28,7 +28,7 @@ class Technician extends BaseController
             ->field($field)
             ->where([
                 't.s_id'=>$sid,'t.status'=>1,'c.status'=>1,
-                'c_is_technician' => 1
+                'c.is_technician' => 1
             ])
             ->order('t.sort desc')->select();
         foreach ($list as $k=>&$v){

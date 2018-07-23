@@ -93,7 +93,7 @@
                                                             <td class="center col-sm-2">
                                                                 <div type="button" class="btn btn-primary user-dill-btn" data-id="{$vo.id}">账单</div>
                                                                 <a type="button" class="btn btn-info" href="{:url('admin/user/edit',['id'=>$vo['id']])}" >编辑</a>
-                                                                <!--<a type="button" class="btn btn-danger" href="{:url('admin/user/delete',['id'=>$vo['id']])}">退卡</a>-->
+                                                                <a type="button" class="btn btn-danger" href="{:url('admin/user/manageBack',['id'=>$vo['id']])}">退卡</a>
                                                             </td>
                                                         </tr>
                                                     {/foreach}

@@ -4,19 +4,20 @@
 	<div class="">
 	    <div class="row">
 	        <div class="col-md-2">
-	            <div class="ibox float-e-margins">
-	                <div class="ibox-title">
-	                    <span class="label label-success pull-right">总</span>
-	                    <h5>用户数量</h5>
-	                </div>
-	                <div class="ibox-content">
-	                    <h1 class="no-margins">{$statistics.user}</h1>
-	                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
-	                    </div>
-	                    <small>总计浏览量</small>
-	                </div>
-	            </div>
-	        </div>
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<span class="label label-success pull-right">总</span>
+						<h5>用户数量</h5>
+					</div>
+					<div class="ibox-content">
+						<h1 class="no-margins">{$statistics.user}</h1>
+						<div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+						</div>
+						<small>总计浏览量</small>
+					</div>
+				</div>
+			</div>
+
 			{if !isset($statistics.shop)}
 			<div class="col-md-2">
 				<div class="ibox float-e-margins">
@@ -382,6 +383,20 @@
 							</small>
 						</div>
 
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<span class="label label-success pull-right">总</span>
+						<h5>短信剩余条数</h5>
+					</div>
+					<div class="ibox-content">
+						<h1 class="no-margins">{$statistics.shop_detail.note}</h1>
+						<div class="stat-percent font-bold text-success">
+						</div>
+						<small>总计浏览量</small>
 					</div>
 				</div>
 			</div>

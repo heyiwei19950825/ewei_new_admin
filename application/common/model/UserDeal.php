@@ -20,27 +20,33 @@ class UserDeal extends Model
     }
 
     public function deal($params,$s_id){
-
-        //修改用户账户数据
-        $user = Db::name('user')->where([
-            'id' => $params['u_id']
-        ]);
-        if($params['type'] == 1){
-            $userRow = $user->setInc('balance',$params['money']);
+        if($params['u_id'] != 0 ){
+            //修改用户账户数据
+            $user = Db::name('user')->where([
+                'id' => $params['u_id']
+            ]);
+            if($params['type'] == 1){
+                $userRow = $user->setInc('balance',$params['money']);
+            }else{
+                $userRow = $user->setDec('balance',$params['money']);
+            }
         }else{
-            $userRow = $user->setDec('balance',$params['money']);
+            $userRow = true;
         }
+
 
         //添加交易记录
         if($userRow){
            $dealRow = Db::name('user_deal')->insert([
                 'u_id' =>$params['u_id'],
                 'type' =>$params['type'],
+                'describe'=>$params['describe'],
                 'money' =>$params['money'],
                 'remark' => $params['remark'],
                 'time'   => date('Y-m--d H:i:s',time()),
                 's_id'  => $s_id,
-               'deal_type' => 3
+                'is_discount'  => $params['is_discount'],
+                'deal_type' => 3
             ]);
         }
 

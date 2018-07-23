@@ -42,6 +42,7 @@
                                 <th>商家地址</th>
                                 <th>用户数量</th>
                                 <th>收入余额/积分</th>
+                                <th>短信条数</th>
                                 <th>店铺状态</th>
                                 <th>审核状态</th>
                                 <th>创建时间</th>
@@ -61,15 +62,16 @@
                                     <td>{$vo.live_store_address}</td>
                                     <td>{$vo.user_number}人</td>
                                     <td>余额：{$vo.shop_account}<br>积分：{$vo.shop_integral}</td>
+                                    <td>{$vo.note}条 <button type="button" class="btn btn-primary btn-xs btn-affirm" data-href="modal" data-id="{$vo.id}">充值</button></td>
                                     <td>{php}echo $vo['status']==1 ? '启用' : '禁用';{/php}</td>
                                     <td>{php}echo $vo['audit']==1 ? '通过' : '待审核';{/php}</td>
                                     <td>{$vo.create_time}</td>
                                     <td>{$vo.audit_note}</td>
                                     <td class="center">
-                                        <a type="button" class="btn btn-info" data-href="{:url('admin/admin_user/audit',['id'=>$vo['id'],'audit'=>1])}" href="javascript:">通过</a>
-                                        <a type="button" class="btn btn-danger" data-href="{:url('admin/admin_user/audit',['id'=>$vo['id'],'audit'=>0])}" href="javascript:">不通过</a>
-                                        <a type="button" class="btn btn-info" data-href="{:url('admin/admin_user/edit',['id'=>$vo['id']])}" href="javascript:">编辑</a>
-                                        <a type="button" class="btn btn-danger" data-href="{:url('admin/admin_user/delete',['id'=>$vo['id']])}" href="javascript:">删除</a>
+                                        <a type="button" class="btn btn-info btn-affirm" data-href="{:url('admin/admin_user/audit',['id'=>$vo['id'],'audit'=>1])}" href="javascript:">通过</a>
+                                        <a type="button" class="btn btn-danger btn-affirm" data-href="{:url('admin/admin_user/audit',['id'=>$vo['id'],'audit'=>0])}" href="javascript:">不通过</a>
+                                        <a type="button" class="btn btn-info btn-affirm" data-href="{:url('admin/admin_user/edit',['id'=>$vo['id']])}" href="javascript:">编辑</a>
+                                        <a type="button" class="btn btn-danger btn-affirm" data-href="{:url('admin/admin_user/delete',['id'=>$vo['id']])}" href="javascript:">删除</a>
                                     </td>
                                 </tr>
                             {/foreach}
@@ -82,6 +84,23 @@
 
     </div>
 </div>
+<div class="modal inmodal fade" id="note" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">充值短信条数</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label></label> <input type="number" placeholder="输入充值的短信条数" class="form-note"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary recharge-note" data-id="0">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 {/block}
 {block name="js"}
 <!-- Data Tables -->
@@ -92,7 +111,7 @@
     <script>
         $(document).ready(function () {
             $('#editable').dataTable();
-            $('.btn').on('click',function(){
+            $('.btn-affirm').on('click',function(){
                 var that = $(this);
                 layui.use('layer', function() {
                     var url = "{:url('admin/admin_user/passAffirm')}";
@@ -101,7 +120,12 @@
                             password:pass
                         },function(e){
                             if(e.code == 1 ){
-                                window.location.href = that.attr('data-href');
+                                if( that.attr('data-href') == 'modal' ){
+                                    $('.recharge-note').attr('data-id',that.attr('data-id'));
+                                    $('#note').modal('show');
+                                }else{
+                                    window.location.href = that.attr('data-href');
+                                }
                                 layer.close(index);
                             }else{
                                 layer.msg(e.msg);
@@ -109,6 +133,24 @@
                         })
                     });
                 })
+            })
+
+            //充值短信
+            $('body').on('click','.recharge-note',function(){
+                var id = $(this).attr('data-id');
+                var number = $('.form-note').val();
+              $.post('/admin/admin_user/rechargeNote',{
+                  id:id,
+                  number:number
+              },function(data){
+                  layui.use('layer', function() {
+                      layer.msg(data.msg);
+                  });
+                    if(data.code == 1 ){
+                        $('#note').modal('hide');
+                        window.location.reload();
+                    }
+              })
             })
 
         });

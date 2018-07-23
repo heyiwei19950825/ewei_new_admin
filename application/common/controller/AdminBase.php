@@ -17,6 +17,7 @@ class AdminBase extends Controller
 {
     protected $admin_id;
     protected $systemConfig;
+    protected $shopConfig;
     protected function _initialize()
     {
         parent::_initialize();
@@ -30,8 +31,13 @@ class AdminBase extends Controller
 
         //系统配置文件
         $this->systemConfig = Db::name('system')->find();
+        //店铺配置文件
+        $this->shopConfig = Db::name('shop')->where(['u_id'=>$this->admin_id])->find();
+
         // 输出当前请求控制器（配合后台侧边菜单选中状态）
         $this->assign('controller', Loader::parseName($this->request->controller()));
+        $this->assign('system', $this->systemConfig);
+
     }
 
     /**

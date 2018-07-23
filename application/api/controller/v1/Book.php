@@ -12,6 +12,7 @@ namespace app\api\controller\v1;
 use app\api\controller\BaseController;
 use app\api\service\Token;
 use app\api\model\Book as BookModel;
+use org\SendSms;
 use think\Db;
 
 class Book extends BaseController
@@ -64,6 +65,15 @@ class Book extends BaseController
                 $row['errno']   = 1;
                 $row['errmsg']  = $msg;
             }else{
+                //发送短信通知
+                $shopConfig = Db::name('shop')->where(['id'=>$params['s_id']])->find();
+
+                $technician = Db::name('technician')->where(['id'=>$params['project_id']])->find();
+                $user = Db::name('user')->where(['id'=>$this->uid])->find();
+                if(in_array('recharge',json_decode($shopConfig['note_config']),true)&& $shopConfig['note'] > 0 ){
+                    ( new SendSms())->sendByTemplateId($user['mobile'],156837,[$shopConfig['shop_name'],$technician['name'].'于'.$params['time']],$params['s_id']);
+                }
+
                 $row['errno']   = 0;
                 $row['errmsg']  = '预约成功';
             }

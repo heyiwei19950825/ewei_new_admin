@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use app\common\model\Technician as TechnicianModel;
 use app\common\model\TechnicianCategory as TechnicianCategoryModel;
 use app\common\controller\AdminBase;
+use app\common\model\TechnicianPerformance;
 
 /**
  * 技师管理
@@ -14,6 +15,8 @@ class Technician extends AdminBase
 {
     protected $technician_model;
     protected $technician_category_model;
+    protected $technician_performance_model;
+
 
     protected function _initialize()
     {
@@ -21,6 +24,7 @@ class Technician extends AdminBase
         $this->technician_model  = new TechnicianModel();
         $this->technician_category_model = new TechnicianCategoryModel();
         $category_list = $this->technician_category_model->where(['s_id'=>$this->admin_id])->select();
+        $this->technician_performance_model = new TechnicianPerformance();
         $this->assign('category_list', $category_list);
     }
 
@@ -142,5 +146,58 @@ class Technician extends AdminBase
         } else {
             $this->error('请选择需要操作的技师');
         }
+    }
+
+    /**
+     * 获取标记分类的员工列表
+     */
+    public function getLabelList(){
+        $cObject = $this->technician_category_model->where(['s_id'=>$this->admin_id,'is_form'=>1])->field('id,name')->select();
+        $row = [];
+        foreach ($cObject as $k=>$v){
+            $technician = $this->technician_model->where(['s_id'=>$this->admin_id,'c_id'=>['in',$v['id']]])->field('id,name')->select();
+            $row[] = ['id'=>$v['id'],'name'=>$v['name'],'tList'=>$technician];
+        }
+        if( $row ){
+            $this->success('查询成功','',$row );
+        }else{
+            $this->error('暂无数据');
+        }
+    }
+
+    /**
+     * 员工绩效
+     * @return mixed
+     */
+    public function performance(){
+        $start_time = $this->request->param('start_time',date('Y-m-d'));
+        $end_time = $this->request->param('end_time',date('Y-m-d'));
+        $start = $start_time.' 00:00:00';
+        $end = $end_time.' 24:59:59';
+        $technicianList = $this->technician_model->getList(['s_id' =>$this->admin_id],'id,name');
+        $payments_list = $this->technician_performance_model->getPerformanceList(
+            [
+                'start'=>$start,
+                'end'=>$end,
+                's_id' => $this->admin_id
+            ],'s.*,u.username,u.uni_id'
+        );
+        //业绩
+        foreach($technicianList as &$v){
+            $v['performance']['goods'] = 0 ;
+            $v['performance']['server'] = 0 ;
+        }
+        foreach( $technicianList as &$v){
+            foreach($payments_list as $pv){
+                if($pv['t_id'] == $v['id']){
+                    if($pv['type'] == 1 ){//商品提成
+                        $v['performance']['goods'] += $pv['performance'];
+                    }else{//服务业绩
+                        $v['performance']['server'] += $pv['performance'];
+                    }
+                }
+            }
+        }
+        return $this->fetch('performance',['list'=>$payments_list,'technicianList'=>$technicianList,'start_time'=>$start_time,'end_time'=>$end_time]);
     }
 }

@@ -15,9 +15,11 @@ use think\Model;
 class ServerProject extends Model
 {
 
-
-    public function getList( $params ){
-        $projectList = Db::name('server_project')->field('name,c_id,id,price')->where('')->select();
+    /*
+     * 更具ID查询信息列表
+     */
+    public function getList( $params,$field='name,c_id,id,price' ){
+        $projectList = Db::name('server_project')->field($field)->where($params)->select();
         return $projectList;
     }
 

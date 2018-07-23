@@ -18,18 +18,14 @@ class Goods extends Model
      * @return mixed
      */
     public function getGoodsList( $map = array(), $paginate = true,$page = 1, $size = 15,$field = '',$group ='id' ){
-        $now = date('Y-m-d H:i:s',time());
-        $map['btime']   = ['<=',$now];
-        $map['etime']   = ['>=',$now];
         $map['status']  = ['=',1];
-        $goods_list  = $this->field($field)->where($map)->order(['publish_time' => 'DESC'])->group($group);
+        $goodsDb = Db::name('goods');
+        $goods_list  = $goodsDb->field($field)->where($map)->order(['publish_time' => 'DESC'])->group($group);
         if($paginate){
-            $row = $goods_list->paginate($size, false, ['page' => $page])->toArray();
+            $row = $goods_list->paginate($size, false, ['page' => $page]);
         }else{
             $row = $goods_list->select();
         }
-
-
         return $row;
     }
 
@@ -65,5 +61,24 @@ class Goods extends Model
 
         $row = Db::query($sql);
         return $row[0]['number'];
+    }
+
+    public static function goodsPerformance($id,$sId=0){
+        $goods = Db::name('goods')->where(['id'=>$id,'s_id'=>$sId])->field('sp_price,royalty,royalty_type,royalty_template')->find();
+
+        if( $goods['royalty'] == 0 ){
+            $template = Db::name('royalties_template')->where(['id'=>$goods['royalty_template'],'s_id'=>$sId])->find();
+            if( $template['type'] == 1 ){
+                return $template['royalties'];
+            }else{
+                return ($goods['sp_price'] * $template['royalties']/100);
+            }
+        }else{
+            if($goods['royalty_type'] == 1 ){
+                return $goods['royalty'];
+            }else{
+                return ($goods['sp_price'] * $goods['royalty']/100);
+            }
+        }
     }
 }

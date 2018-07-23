@@ -58,7 +58,6 @@ class Pay
         $this->checkOrderValid();
 
         $order = OrderPayment::get($this->payId);
-        dump($order);die;
 //        //积分购买计算运费
 //        if( $order['order_type'] == 2 ){
 //            if( $order['shipping_money'] != 0 ){

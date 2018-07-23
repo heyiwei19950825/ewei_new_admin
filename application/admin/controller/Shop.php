@@ -27,15 +27,30 @@ class Shop extends AdminBase
     }
 
     public function setting(){
-
         $shop = $this->shop_model->where(['u_id'=>$this->admin_id])->find();
+        $shop['note_config'] = json_decode($shop['note_config']);
         $shop['book'] = Db::name('book_config')->where(['s_id'=>$this->admin_id])->find();
-        return $this->fetch('',['shop'=>$shop]);
+        $recharge = $consumption = $book = false;
+        if( !empty($shop['note_config']) ){
+            if(in_array('recharge', $shop['note_config'])){
+                $recharge = true;
+            }
+            if(in_array('consumption', $shop['note_config'])){
+                $consumption = true;
+            }
+
+            if(in_array('book', $shop['note_config'])){
+                $book = true;
+            }
+        }
+
+        return $this->fetch('',['shop'=>$shop,'book' =>$book,'recharge'=>$recharge,'consumption'=>$consumption]);
     }
 
     public function update(){
         if($this->request->isPost()){
             $params = $this->request->param();
+
             $data =[
                 "shop_logo" => $params['shop_logo'],
                 "shop_shopowner" => $params['shop_shopowner'],
@@ -44,7 +59,9 @@ class Shop extends AdminBase
                 "live_store_address" =>  $params['live_store_address'],
                 "business_time" => $params['business_time'],
                 "brief" => $params['brief'],
-                "content" => $params['content']
+                "content" => $params['content'],
+                "is_discount" => $params['is_discount'],
+                "note_config" => json_encode($params['note_config'])
             ];
             $book = [
                 'switch' => $params['switch'],

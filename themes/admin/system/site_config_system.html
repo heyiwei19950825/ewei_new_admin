@@ -5,13 +5,25 @@
                     <h5>首页菜单列表<small></small></h5>
                 </div>
                 <div class="ibox-content">
-                    <form class="form-horizontal" id="ajax-from"  action="{:url('admin/updateSiteConfig/save')}" method="post">
+                    <form class="form-horizontal" id="ajax-from"  action="{:url('admin/system/updateSiteConfig')}" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">后台展示二维码</label>
+                            <div class="col-sm-5">
+                                <img alt="image"  data-path="system" id="upload" class="thumb-img" src="{$site_config.sys_rcode}" style="width:100px;margin-left:15px;" />
+                                <input type="hidden" name="sys_rcode" class="theme" value="{$site_config.sys_rcode}">
+                            </div>
+                        </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label"><span>*</span> 标题</label>
+                            <label class="col-sm-2 control-label">后台显示联系电话</label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" name="title" placeholder="标题">
-                                <span class="help-block m-b-none">长度不超过20个字</span>
+                                <input type="number" class="form-control" name="sys_phone" placeholder="联系电话" value="{$site_config.sys_phone}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">后台显示微信号</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="sys_wechat" placeholder="微信号" value="{$site_config.sys_wechat}">
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>

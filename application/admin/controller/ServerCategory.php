@@ -10,7 +10,7 @@ namespace app\admin\controller;
 
 
 use app\common\controller\AdminBase;
-use app\Common\model\ServerCategory as ServerCategoryModel;
+use app\common\model\ServerCategory as ServerCategoryModel;
 use app\common\model\ServerProject as ServerProjectModel;
 class ServerCategory extends AdminBase
 {

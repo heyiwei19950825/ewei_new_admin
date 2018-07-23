@@ -54,6 +54,7 @@
                             <th>消费时间</th>
                             <th>客户信息</th>
                             <th>消费金额</th>
+                            <th>是否折扣价购买</th>
                             <th>消费描述</th>
                         </tr>
                         </thead>
@@ -74,9 +75,13 @@
                             </td>
                             <td>{$vo.time}</td>
                             <td>
+                                {if $vo.uni_id == 0}
+                                散客消费
+                                {else}
                                 会员卡号：{$vo.uni_id}</br>
                                 会员名称：{$vo.username}</br>
                                 会员手机号：{$vo.mobile}
+                                {/if}
                             </td>
                             <td>
                                 金额：{$vo.money}</br>
@@ -85,6 +90,13 @@
                                 {/if}
                                 {if $vo.give_integral neq 0}
                                 赠送积分{$vo.give_integral}</br>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $vo.is_discount neq 0}
+                                    是
+                                {else}
+                                    否
                                 {/if}
                             </td>
                             <td>
