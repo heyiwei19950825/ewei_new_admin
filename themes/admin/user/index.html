@@ -93,7 +93,7 @@
                                                             <td class="center col-sm-2">
                                                                 <div type="button" class="btn btn-primary user-dill-btn" data-id="{$vo.id}">账单</div>
                                                                 <a type="button" class="btn btn-info" href="{:url('admin/user/edit',['id'=>$vo['id']])}" >编辑</a>
-                                                                <a type="button" class="btn btn-danger" href="{:url('admin/user/manageBack',['id'=>$vo['id']])}">退卡</a>
+                                                                <div class="btn btn-danger btn-affirm" data-href="{:url('admin/user/manageBack',['id'=>$vo['id']])}">退卡</div>
                                                             </td>
                                                         </tr>
                                                     {/foreach}
@@ -280,6 +280,25 @@
 
         $('#User').dataTable();
 
+        //退卡
+        $('body').on('click','.btn-affirm',function(){
+            var that = $(this);
+            layui.use('layer', function() {
+                var url = "{:url('admin/admin_user/passAffirm')}";
+                layer.prompt({title: '输入密码，并确认',offset: ['30%', '45%']}, function (pass, index) {
+                    $.post(url,{
+                        password:pass
+                    },function(e){
+                        if(e.code == 1 ){
+                            window.location.href = that.attr('data-href');
+                            layer.close(index);
+                        }else{
+                            layer.msg(e.msg);
+                        }
+                    })
+                });
+            })
+        })
         //查看账单
         $('#Member').on('click','.user-dill-btn',function(){
             console.log($(this));

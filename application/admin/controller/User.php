@@ -404,12 +404,16 @@ class User extends AdminBase
 
             //购买记录日志添加
             $number = 0;
+            $staffLength = count($staffId);
+            $serverLength = count($server);
+            $checkNumber = 0;
             foreach ($server as $k=> $v){
                 if($serverSPrice[$k] != 0 ){
                     $price = (float)$serverSPrice[$k] * (float)$serverNumber[$k];
                 }else{
                     $price = (float)$newServerList[$v]['price'] * (float)$serverNumber[$k];
                 }
+                $priceVal = $serverSPrice[$k] != 0?(float)$serverSPrice[$k]:(float)$newServerList[$v]['price'];
                 if($isDiscount == 1 && $type == 0 ){
                     $params['money'] = $params['serverSPrice'][$k] == 0 ?round($price * ($user['rank']['discount'] /10 ),1)  :$params['serverSPrice'][$k] * $serverNumber[$k];
                 }else{
@@ -428,30 +432,35 @@ class User extends AdminBase
                 $this->deal_model->deal($params,$this->admin_id);
 
                 //员工绩效
-                $staffLength = count($staffId);
-                for ($i=0;$i<$staffLength;$i++){
-                    if($i>= $number){
-                        if($performance[$i] != 0  && $staffId[$i] != 0 ){
-                            $tInfo = $this->technician_model->getInfo(['id'=>$staffId[$i],'s_id'=>$this->admin_id]);
-                            if( empty($tInfo)){
-                                continue;
-                            }
-                            $data = [
-                                't_id' => $staffId[$i],
-                                't_name' => $tInfo['name'],
-                                's_id'   => $v,
-                                's_name' => $newServerList[$v]['name'],
-                                's_price' => $newServerList[$v]['price'],
-                                'performance' => $performance[$i],
-                                'type'    => 0,
-                                'time' => date('Y-m-d H:i:s',time()),
-                                'shop_id' => $this->admin_id,
-                                'u_id' =>$u_id
-                            ];
-                            Db::name('technician_performance')->insert($data);
+                for ($i=$number;$i<$staffLength;$i++){
+                    if($performance[$i] != 0  && $staffId[$i] != 0 &&   $staffId[$i] != '0'){
+                        $tInfo = $this->technician_model->getInfo(['id'=>$staffId[$i],'s_id'=>$this->admin_id]);
+                        if( empty($tInfo)){
+                            continue;
                         }
+                        $data = [
+                            't_id' => $staffId[$i],
+                            't_name' => $tInfo['name'],
+                            's_id'   => $v,
+                            's_name' => $newServerList[$v]['name'],
+                            's_o_price' => $newServerList[$v]['price'],
+                            's_price' => $priceVal,
+                            's_number' => $serverNumber[$k],
+                            'performance' => $params['money'],
+                            'performance_ratio' => $tInfo['performance']!= 0?intval(($params['money'] * $tInfo['performance'])/100):0,
+                            'type'    => 0,
+                            'time' => date('Y-m-d H:i:s',time()),
+                            'shop_id' => $this->admin_id,
+                            'u_id' =>$u_id
+                        ];
+                        Db::name('technician_performance')->insert($data);
                     }
-
+                    $checkNumber++;
+                    $number++;
+                    if($checkNumber == ($staffLength/$serverLength) ){
+                        $checkNumber = 0;
+                        break;
+                    }
                 }
             }
             //发送短信通知
@@ -546,6 +555,7 @@ class User extends AdminBase
                 }else{
                     $price = (int)$newGoodsList[$v]['sp_price'] * (int)$goodsNum[$k];
                 }
+                $priceVal = $goodsSPrice[$k] != 0?(int)$goodsSPrice[$k]:(int)$newGoodsList[$v]['sp_price'];
                 if($isDiscount == 1 && $type == 0 ){
                     $params['money'] = $goodsSPrice[$k] == 0 ?round($price * ($user['rank']['discount'] /10 ),1)  :$goodsSPrice[$k] * $goodsNum[$k];
                 }else{
@@ -562,15 +572,18 @@ class User extends AdminBase
                 $row = $this->deal_model->deal($params,$this->admin_id);
                 if($staffId[$k] != 0 ){
                     $tInfo = $this->technician_model->getInfo(['id'=>$staffId[$k],'s_id'=>$this->admin_id]);
-                    $performance = Goods::goodsPerformance($v,$this->admin_id);
+                    $performance = Goods::goodsPerformance($v,$params['money'],$this->admin_id);
                     //员工绩效
                     $data = [
                         't_id' => $staffId[$k],
                         't_name' => $tInfo['name'],
                         's_id'   => $v,
                         's_name' => $newGoodsList[$v]['name'],
-                        's_price' => $newGoodsList[$v]['sp_price'],
-                        'performance' => $performance,
+                        's_o_price' => $newGoodsList[$v]['sp_price'],
+                        's_price' => $priceVal,
+                        's_number' => $goodsNum[$k],
+                        'performance' => $params['money'],
+                        'performance_ratio' => intval($performance*(int)$goodsNum[$k]),
                         'type'    => 1,
                         'time' => date('Y-m-d H:i:s',time()),
                         'shop_id' => $this->admin_id,

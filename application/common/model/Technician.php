@@ -26,7 +26,7 @@ class Technician extends  Model
      * @param string $field
      * @return array|false|\PDOStatement|string|Model
      */
-    public function  getInfo($params,$field ='name,c_id,id,price'){
+    public function  getInfo($params,$field ='name,c_id,id,price,performance'){
         $projectList = Db::name('technician')->field($field)->where(['id'=>$params['id']])->find();
 
         return $projectList;

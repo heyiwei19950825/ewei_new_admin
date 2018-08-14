@@ -38,7 +38,7 @@ class Technician extends AdminBase
     public function index($cid = 0)
     {
         $map   = [];
-        $field = 'id,name,c_id,status,sort,mobile,cover_pic,service ';
+        $field = 'id,name,c_id,status,sort,mobile,cover_pic,service,performance';
         if ($cid > 0) {
             $map['cid'] =  $cid;
         }
@@ -185,19 +185,42 @@ class Technician extends AdminBase
         //业绩
         foreach($technicianList as &$v){
             $v['performance']['goods'] = 0 ;
+            $v['performance']['goods_ratio'] = 0 ;
             $v['performance']['server'] = 0 ;
+            $v['performance']['server_ratio'] = 0 ;
         }
         foreach( $technicianList as &$v){
             foreach($payments_list as $pv){
                 if($pv['t_id'] == $v['id']){
                     if($pv['type'] == 1 ){//商品提成
                         $v['performance']['goods'] += $pv['performance'];
+                        $v['performance']['goods_ratio'] += $pv['performance_ratio'];
                     }else{//服务业绩
                         $v['performance']['server'] += $pv['performance'];
+                        $v['performance']['server_ratio'] += $pv['performance_ratio'];
                     }
                 }
             }
         }
         return $this->fetch('performance',['list'=>$payments_list,'technicianList'=>$technicianList,'start_time'=>$start_time,'end_time'=>$end_time]);
+    }
+
+    /**
+     * 设置员工提成
+     */
+    public function setPerformance(){
+        if($this->request->isPost()){
+            $params = $this->request->param();
+            $row = $this->technician_model->where(['id'=>$params['id']])->update([
+                'performance' => $params['performanceVal']
+            ]);
+            if($row){
+                return $this->success('设置成功');
+            }else{
+                return $this->error('网络异常');
+            }
+        }else{
+            return $this->error('错误的请求方式');
+        }
     }
 }

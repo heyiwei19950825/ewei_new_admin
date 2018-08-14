@@ -126,8 +126,8 @@
                                             <input type="hidden" class="server-tr" name="server[]" >
                                             <td class="select-server server-name" data-id="0"  data-toggle="modal" data-target="#server-list"></td>
                                             <td><span class="server-price"></span><input type="hidden" name="server-price[]" class="server-price-val"></td>
-                                            <td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td>
-                                            <td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]" ></td>
+                                            <td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
+                                            <td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="number" name="serverSPrice[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
                                             <td  class="del-tr" style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>
                                         </tr>
                                         <tr class="count">
@@ -187,8 +187,8 @@
                                                 <input type="hidden" class="goods-tr" name="goods[]" >
                                                 <td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list"></td>
                                                 <td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td>
-                                                <td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td>
-                                                <td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td>
+                                                <td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
+                                                <td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
                                                 <td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td>
                                                 <td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>
                                             </tr>
@@ -766,8 +766,8 @@
             var html  = ' <tr class="server-data" data-id="'+id+'"> <input type="hidden" class="server-tr" name="server[]">' +
                     '<td class="select-server server-name"  data-id="'+id+'" data-toggle="modal" data-target="#server-list"></td> ' +
                     '<td><span class="server-price"></span><input type="hidden" name="server-price[]" class="server-price-val"></td> ' +
-                    '<td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td> ' +
-                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth server-num" type="number" value="1" name="serverNumber[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="number" name="serverSPrice[]"></td> ' +
                     addHtml +
                     '<td style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
                     '</tr>'
@@ -780,8 +780,8 @@
             var html  = ' <tr class="server-data" data-id="0"> <input type="hidden" class="server-tr" name="server[]">' +
                     '<td class="select-server server-name"  data-id="0" data-toggle="modal" data-target="#server-list"></td> ' +
                     '<td><span class="server-price"></span><input type="hidden" name="server-price[]" class="server-price-val"></td> ' +
-                    '<td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td> ' +
-                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]"></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth server-num" type="number" value="1" name="serverNumber[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="number" name="serverSPrice[]"></td> ' +
                     addHtml +
                     '<td style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
                     '</tr>'
@@ -794,8 +794,8 @@
                     '<input type="hidden" class="goods-tr" name="goods[]" > ' +
                     '<td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list"></td> ' +
                     '<td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td> ' +
-                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td> ' +
-                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" ></td> ' +
                     '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
                     '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
                     '</tr>'
@@ -898,10 +898,10 @@
                         thHtml += '<th scope="col" colspan="2" class="txw1 staff-category" style="" data-id="' + v.id + '">' + v.name + '</th>';
                         trHtml += '<td>工号</td><th scope="col" style="">业绩</th>';
                         addHtml += '<td class="staff-select" data-type="0" data-toggle="modal" data-target="#staff" data-id="'+v.id+'"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
-                                '<td><input size="5" class="inp_sml_nolenth inp_c1" type="text" name="performance[]"  value="0"></td>'
+                                '<td><input size="5" class="inp_sml_nolenth inp_c1 performance" type="text" name="performance[]"  value="0" ></td>'
                         staffHtml += '<div class="staff-category-item"  data-id="'+v.id+'">'
                         $(v.tList).each(function(ti,tv){
-                            staffHtml += '<div class="col-sm-3 staff-item" data-id="'+tv.id+'"> <div class="widget style1 '+bgColor[i]+'"> <div class="row vertical-align"> <div class="col-xs-3"> <i class="fa fa-user fa-3x"></i> </div> <div class="col-xs-9 text-right"><span class="font-bold col-xs-12">'+v.name+'</span> <span style="margin-top: 5px;" class="font-bold  col-xs-12">'+tv.name+'</span> </div> </div> </div> </div>'
+                            staffHtml += '<div class="col-sm-3 staff-item" data-id="'+tv.id+'" data-name="'+tv.name+'"> <div class="widget style1 '+bgColor[i]+'"> <div class="row vertical-align"> <div class="col-xs-3"> <i class="fa fa-user fa-3x"></i> </div> <div class="col-xs-9 text-right"><span class="font-bold col-xs-12">'+v.name+'</span> <span style="margin-top: 5px;" class="font-bold  col-xs-12">'+tv.name+'</span> </div> </div> </div> </div>'
                         })
                         staffHtml += '</div>'
                     })
@@ -957,6 +957,7 @@
             //商品
             if( type == 1 ){
                 var id = $(this).attr('data-id');
+                var tName = $(this).attr('data-name');
                 var selectId = $(this).parents('.staff').attr('data-select-id');
                 var trId = $(this).parents('.staff').attr('data-id');
                 //查询对应的tr数据
@@ -964,7 +965,7 @@
                     if( $(v).attr('data-id') == trId){
                         $(v).find('.staff-select').each(function(si,sv){
                             if( $(sv).attr('data-id') == selectId ){
-                                $(sv).find('.staff-id').text(id);
+                                $(sv).find('.staff-id').text(tName);
                                 $(sv).find('.staff-id-val').val(id);
                             }
                         })
@@ -973,6 +974,7 @@
             //服务
             }else if(type == 0 ){
                 var id = $(this).attr('data-id');
+                var tName = $(this).attr('data-name');
                 var selectId = $(this).parents('.staff').attr('data-select-id');
                 var trId = $(this).parents('.staff').attr('data-id');
                 //查询对应的tr数据
@@ -987,9 +989,19 @@
                     if( $(v).attr('data-id') == trId){
                         $(v).find('.staff-select').each(function(si,sv){
                             if( $(sv).attr('data-id') == selectId ){
-                                $(sv).find('.staff-id').text(id);
+                                $(sv).find('.staff-id').text(tName);
                                 $(sv).find('.staff-id-val').val(id);
-                                $(sv).next().find('input[name=performance]').val(sum);
+                                //会员折扣
+                                var  serverSPricee = $(sv).parents('tr').find('.server-s-price') ;
+                                if($('.user-id').val() != 0 && serverSPricee.val() == 0){
+                                    var rankDiscount = $('input[name=rank_discount]').val()/10;
+                                    if( rankDiscount != 0 ) {
+                                        //优惠的价格
+                                        var discountPrice = sum * rankDiscount;
+                                        sum = Math.ceil(discountPrice);
+                                    }
+                                }
+                                $(sv).next().find('.performance').val(sum);
                             }
                         })
                     }
@@ -1008,8 +1020,8 @@
                     '<input type="hidden" class="server-tr" name="server[]" value="'+id+'"> ' +
                     '<td class="select-server server-name"  data-id="'+trId+'" data-toggle="modal" data-target="#server-list">'+name+'</td> ' +
                     '<td style=""><span class="server-price">'+price+'</span><input type="hidden" name="server-price[]" class="server-price-val" value="'+price+'"></td> ' +
-                    '<td><input size="2" class="inp_sml_nolenth server-num" type="text" value="1" name="serverNumber[]"></td> ' +
-                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="text" name="serverSPrice[]"></td>'+ addHtml +
+                    '<td><input size="2" class="inp_sml_nolenth server-num" type="number" value="1" name="serverNumber[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth server-s-price" value="0"  type="number" name="serverSPrice[]"></td>'+ addHtml +
                     '<td  class="del-tr" style="" align="center"><a href="#" class="rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
                     '</tr>'
             //判断是否是拟态窗中选择服务信息
@@ -1062,8 +1074,8 @@
                    ' <input type="hidden" class="goods-tr" name="goods[]" value="'+id+'"> ' +
                     '<td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list">'+name+'</td> ' +
                     '<td><span class="goods-price">'+price+'</span><input type="hidden" name="goodsPrice[]" class="goods-price-val" value="'+price+'"></td> ' +
-                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td> ' +
-                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" ></td> ' +
                     '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
                     '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>'
                     '</tr>'
@@ -1116,8 +1128,8 @@
                     '<input type="hidden" class="goods-tr" name="goods[]" > ' +
                     '<td class="select-goods goods-name" data-id="'+id+'"  data-toggle="modal" data-target="#goods-list"></td> ' +
                     '<td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td> ' +
-                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="text" value="1" name="goodsNum[]"></td> ' +
-                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="text" name="goodsSPrice[]" ></td> ' +
+                    '<td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]"></td> ' +
+                    '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" ></td> ' +
                     '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
                     '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
                     '</tr>'
@@ -1126,8 +1138,17 @@
 
         //当数量发生改变时重新计算
         $('body').on('change','.server-num,.server-s-price',function(){
+            var price   = $(this).parents('tr').find('.server-s-price').val();
+            var num     = $(this).parents('tr').find('.server-num').val();
+
             if($(this).parent().parents('tr').find('.server-tr').val() != ''){
                 countSum();
+                var  performance = $(this).parent().parents('tr').find('.performance') ;
+                $(performance).each(function(i,v){
+                    if( $(v).val() != 0 ){
+                        $(v).val(price * num)
+                    }
+                })
             }
         })
 
@@ -1232,15 +1253,18 @@
                     }
                 }
                 layer.confirm('结算金额'+money+'元', {
-                    btn: ['确认结算','取消'] //按钮
+                    btn: ['确认结算','取消'], //按钮
+                    area: ['360px', '127px'], //宽高
                 }, function(){
-                    var uId = $('.user-id').val();
-                    if( uId == 0 ){
+
+                    var userId = $('.user-id').val();
+                    if( userId == 0 ){
                         if(isTemporary){
                             requestAjax(that);
                             tableInit();
                             goodsTableInit();
                             countSum();
+                            layer.close(index);
                         }else{
                             layer.msg('会员信息不能为空，收银失败!', {icon: 2});
                         }
@@ -1267,8 +1291,12 @@
         })
         //Ajax请求
         function requestAjax(that){
+
             layui.use('layer', function() { //独立版的layer无需执行这一句
                 var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                var index = layer.load(2, {
+                    shade: [0.1,'#eee'] //0.1透明度的白色背景
+                });
                 //结算请求
                 var from = that.parents('.ajax-from')[0];
                 var data = that.parents('.ajax-from').serialize();
@@ -1283,6 +1311,7 @@
                         } else {
                             layer.msg(info.msg, {icon: 2});
                         }
+                        layer.close(index);
                     }
                 });
             })
@@ -1303,6 +1332,8 @@
             return  Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)
 
         }
+
+
     })
 
 

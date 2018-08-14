@@ -117,10 +117,16 @@ class Index extends AdminBase
                     'deal_type' => 1
                 ])
                 ->where($userRechargeMap)->select();
-                $statistics['user_open'][$k] = $user_open[0];
-
+            $statistics['user_open'][$k] = $user_open[0];
+            $traveler_deal = Db::name('user_deal')
+                ->field('count(id) as number,sum(money) as money,sum(give_integral) as give_integral,sum(give_money) as give_money')
+                ->where($map)
+                ->where([
+                    'u_id' => 0
+                ])
+                ->where($userRechargeMap)->select();
+            $statistics['traveler_deal'][$k] = $traveler_deal[0];
         }
-
         //预约订单数
         foreach( $timeMap as $k=>$v) {
             $userRechargeMap['time'] = $v;

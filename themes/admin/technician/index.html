@@ -48,6 +48,7 @@
                             <th>技师头像</th>
                             <th>服务标签</th>
                             <th>手机号</th>
+                            <th>提成比例【业绩】</th>
                             <th>状态</th>
                             <th>排序</th>
                             <th>操作</th>
@@ -62,11 +63,13 @@
                             <td><img src="{$vo.cover_pic}" alt="" style="width: 50px;"></td>
                             <td>{$vo.service}</td>
                             <td>{$vo.mobile}</td>
+                            <td class="performance_val">{$vo.performance}%</td>
                             <td>{php}echo $vo['status']==1 ? '显示' : '隐藏';{/php}</td>
                             <td>{$vo.sort}</td>
                             <td class="center" style="width: 250px;" >
-                                <a type="button" class="btn btn-info" href="{:url('admin/technician/edit',['id'=>$vo['id']])}">编辑</a>
-                                <a type="button" class="btn btn-danger" href="{:url('admin/technician/delete',['id'=>$vo['id']])}">删除</a>
+                                <div class="btn btn-primary performance" data-toggle="modal" data-target="#performance" data-id="{$vo['id']}">提成设置</div>
+                                <a  class="btn btn-info" href="{:url('admin/technician/edit',['id'=>$vo['id']])}">编辑</a>
+                                <a  class="btn btn-danger" href="{:url('admin/technician/delete',['id'=>$vo['id']])}">删除</a>
                             </td>
                         </tr>
                         {/foreach}
@@ -78,6 +81,29 @@
         </div>
     </div>
 </div>
+
+<div class="modal inmodal fade" id="performance" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">提成设置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group m-b royalty_type" style="">
+                    <input type="number" class="form-control" name="performance" value="0" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                    <span class="input-group-addon percentage" >% </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary performance-btn" data-id="0">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {/block}
 {block name="js"}
 <!-- Data Tables -->
@@ -88,6 +114,32 @@
 <script>
     $(document).ready(function () {
         $('#editable').dataTable();
+
+        //提成弹窗
+        $('.performance').on('click',function(){
+            var id = $(this).attr('data-id');
+            $('.performance-btn').attr('data-id',id);
+        })
+
+        //提成设置
+        $('.performance-btn').on('click',function(){
+            var id = $(this).attr('data-id');
+            var performanceVal = $('input[name=performance]').val();
+            $.post('{:url("admin/technician/setPerformance")}',{
+                id:id,
+                performanceVal:performanceVal
+            },function(e){
+                layer.msg(e.msg);
+                if(e.code == 1){
+                    $('#performance').modal('hide');
+                }
+                $('.performance').each(function(i,v){
+                    if($(v).attr('data-id') == id ){
+                        $(v).parents('tr').find('.performance_val').text(performanceVal+'%');
+                    }
+                })
+            })
+        })
     });
 </script>
 {/block}

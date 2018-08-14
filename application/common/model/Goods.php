@@ -63,9 +63,11 @@ class Goods extends Model
         return $row[0]['number'];
     }
 
-    public static function goodsPerformance($id,$sId=0){
+    public static function goodsPerformance($id,$money=0,$sId=0){
         $goods = Db::name('goods')->where(['id'=>$id,'s_id'=>$sId])->field('sp_price,royalty,royalty_type,royalty_template')->find();
-
+        if($money != 0 ){
+            $goods['sp_price'] = $money;
+        }
         if( $goods['royalty'] == 0 ){
             $template = Db::name('royalties_template')->where(['id'=>$goods['royalty_template'],'s_id'=>$sId])->find();
             if( $template['type'] == 1 ){

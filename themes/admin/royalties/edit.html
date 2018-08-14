@@ -40,7 +40,6 @@
                 </div>
                 <div class="ibox-content">
                     <form class="form-horizontal" id="ajax-from"  action="{:url('admin/royalties/update')}" method="post">
-                        <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><span>*</span> 模板名称</label>
                             <div class="col-sm-5">
@@ -67,7 +66,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">提成额度</label>
                             <div class="col-sm-5">
-                                <input type="text" class="form-control" name="royalties" value="{$info.royalties}">
+                                <input type="text" class="form-control" name="royalties" value="{$info.royalties}" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" >
                                 <span class="help-block m-b-none">根据提成方式设置对应的提成额度</span>
                             </div>
                         </div>

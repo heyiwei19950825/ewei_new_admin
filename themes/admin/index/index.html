@@ -17,7 +17,6 @@
 					</div>
 				</div>
 			</div>
-
 			{if !isset($statistics.shop)}
 			<div class="col-md-2">
 				<div class="ibox float-e-margins">
@@ -64,7 +63,7 @@
 	                </div>
 	            </div>
 	        </div>
-	         <div class="col-md-2">
+			<div class="col-md-2">
 	            <div class="ibox float-e-margins">
 	                <div class="ibox-title">
 	                    <span class="label label-info pull-right">月</span>
@@ -78,23 +77,34 @@
 	                </div>
 	            </div>
 	        </div>
-
-
-	        <div class="col-md-4">
+			<div class="col-md-2">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<span class="label label-success pull-right">总</span>
+						<h5>短信剩余条数</h5>
+					</div>
+					<div class="ibox-content">
+						<h1 class="no-margins">{$statistics.shop_detail.note}</h1>
+						<div class="stat-percent font-bold text-success">
+						</div>
+						<small>总计浏览量</small>
+					</div>
+				</div>
+			</div>
+	        <div class="col-md-2">
 	            <div class="ibox float-e-margins">
 	                <div class="ibox-title">
 	                    <span class="label label-primary pull-right">总</span>
 	                    <h5>访问人次</h5>
 	                </div>
 	                <div class="ibox-content">
-
 	                    <div class="row">
 	                        <div class="col-md-6">
 	                            <h1 class="no-margins">{$statistics.visit}</h1>
-	                            <div class="font-bold text-navy">44% <i class="fa fa-level-up"></i>  <small>增长较快</small>
+	                            <div class="font-bold text-navy">
+									总访问
 	                            </div>
 	                        </div>
-
 	                    </div>
 	                </div>
 	            </div>
@@ -164,8 +174,54 @@
 	            </div>
 	        </div>
 	    </div>
-		<div>
-			<div class="col-lg-6">
+		<div class="row">
+
+			<div class="col-md-3">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<span class="label label-success pull-right">日</span>
+						<h5>散客收入</h5>
+					</div>
+					<div class="ibox-content">
+						<h1 class="no-margins">{$statistics.traveler_deal.toDay.money|default=0}元</h1>
+						<div class="stat-percent font-bold text-success">
+						</div>
+						<small>{$statistics.traveler_deal.toDay.number|default=0}条消费记录</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<span class="label label-success pull-right">月</span>
+						<h5>散客收入</h5>
+					</div>
+					<div class="ibox-content">
+						<h1 class="no-margins">{$statistics.traveler_deal.month.money|default=0}元</h1>
+						<div class="stat-percent font-bold text-success">
+
+						</div>
+						<small>{$statistics.traveler_deal.month.number|default=0}条消费记录</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<span class="label label-success pull-right">年</span>
+						<h5>散客收入</h5>
+					</div>
+					<div class="ibox-content">
+						<h1 class="no-margins">{$statistics.traveler_deal.year.money|default=0}元</h1>
+						<div class="stat-percent font-bold text-success">
+						</div>
+						<small>{$statistics.traveler_deal.year.number|default=0}条消费记录</small>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-content">
 						<div>
@@ -386,23 +442,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-2">
-				<div class="ibox float-e-margins">
-					<div class="ibox-title">
-						<span class="label label-success pull-right">总</span>
-						<h5>短信剩余条数</h5>
-					</div>
-					<div class="ibox-content">
-						<h1 class="no-margins">{$statistics.shop_detail.note}</h1>
-						<div class="stat-percent font-bold text-success">
-						</div>
-						<small>总计浏览量</small>
-					</div>
-				</div>
-			</div>
 	    </div>
 	    <!--<div class="row">-->
-
 	        <!--<div class="col-lg-12">-->
 	            <!--<div class="ibox float-e-margins">-->
 	                <!--<div class="ibox-title">-->

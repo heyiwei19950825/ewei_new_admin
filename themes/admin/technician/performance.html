@@ -47,8 +47,10 @@
                             <div class="panel panel-danger">
                                 <div class="panel-heading">{$vo.name} </div>
                                 <div class="panel-body" style="color:red">
-                                    <div>商品提成：{$vo.performance.goods}元</div>
+                                    <div>商品业绩：{$vo.performance.goods}元</div>
+                                    <div>商品提成：{$vo.performance.goods_ratio}元</div>
                                     <div>服务业绩：{$vo.performance.server}元</div>
+                                    <div>服务提成：{$vo.performance.server_ratio}元</div>
                                 </div>
                             </div>
                         </div>
@@ -65,9 +67,12 @@
                             <th>会员信息</th>
                             <th>消费项目</th>
                             <th>消费类型</th>
-                            <th>消费金额</th>
+                            <th>原价</th>
+                            <th>实际价格</th>
+                            <th>消费数量</th>
                             <th>员工</th>
-                            <th>业绩&提成</th>
+                            <th>业绩</th>
+                            <th>提成</th>
                             <th>时间</th>
                         </tr>
                         </thead>
@@ -78,9 +83,12 @@
                             <td>{if $vo.u_id == 0 }散客{else}{$vo.username}[{$vo.uni_id}]{/if}</td>
                             <td>{$vo.s_name}</td>
                             <td>{if $vo.type eq 0} 服务{elseif $vo.type eq 1}商品{/if}</td>
+                            <td>{$vo.s_o_price}</td>
                             <td>{$vo.s_price}</td>
+                            <td>{$vo.s_number}</td>
                             <td>{$vo.t_name}</td>
                             <td>{$vo.performance}</td>
+                            <td>{$vo.performance_ratio}</td>
                             <td>{$vo.time}</td>
                         </tr>
                         {/foreach}
