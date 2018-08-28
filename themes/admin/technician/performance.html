@@ -73,6 +73,7 @@
                             <th>员工</th>
                             <th>业绩</th>
                             <th>提成</th>
+                            <th>提成方式</th>
                             <th>时间</th>
                         </tr>
                         </thead>
@@ -89,6 +90,7 @@
                             <td>{$vo.t_name}</td>
                             <td>{$vo.performance}</td>
                             <td>{$vo.performance_ratio}</td>
+                            <td>{if $vo.performance_val_ratio != $vo.performance_ratio}自定义提成{else}{if $vo.performance_type == 1 }百分比提成【{$vo.performance_val_ratio}%】{else}固定提成【{$vo.performance_val_ratio}元】{/if}{/if}</td>
                             <td>{$vo.time}</td>
                         </tr>
                         {/foreach}

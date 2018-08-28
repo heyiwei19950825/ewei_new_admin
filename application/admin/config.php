@@ -9,4 +9,6 @@ return [
         // 模板路径
         'view_path' => './themes/admin/'
     ],
+    'exception_handle'       => '\app\lib\exception\AdminExceptionHandler',
+
 ];

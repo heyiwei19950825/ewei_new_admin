@@ -59,7 +59,7 @@ class Date extends BaseController
                             $s++;
                             $i += $interval;
                             if($i > 60){
-                                $i = 60;
+                                continue;
                             }
                             if($i == 0){
                                 $i = '00';

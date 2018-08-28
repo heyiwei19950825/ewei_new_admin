@@ -35,10 +35,10 @@ class Sell extends AdminBase
         $list = $this->deal_model->alias('d')->join('user u','u.id=d.u_id','LEFT')
             ->where(['d.time'=>['>',$start]])
             ->where(['d.time' => ['<',$end]])
-
             ->field('d.*,u.username,u.uni_id,u.mobile')->where([
             'd.s_id' => $this->admin_id
         ])->order('d.id desc')->select();
+
         $money = $this->deal_model->where(['time'=>['>',$start]])
             ->where('s_id',$this->admin_id)
             ->where(['time' => ['<',$end]])->sum('money');

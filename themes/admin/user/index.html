@@ -28,6 +28,7 @@
 <div class="row">
     <div class="ibox">
         <div class="ibox-content">
+
             <div class="col-lg-30">
                 <div class="panel blank-panel">
                     <div class="panel-heading">
@@ -46,14 +47,12 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="ibox float-e-margins">
-                                            <!--<div class="ibox-title">-->
-                                                <!--<a class="btn btn-danger dim" type="button">-->
-                                                    <!--用户数据导入-->
-                                                <!--</a>-->
-                                                <!--<a class="btn btn-danger dim" type="button">-->
-                                                    <!--用户数据导出-->
-                                                <!--</a>-->
-                                            <!--</div>-->
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-2"><input type="number" class="form-control deduct-input" style="width:150px;"></div>
+                                                <div class="btn btn-danger dim col-sm-1 deduct-btn">
+                                                   扣除费用
+                                                </div>
+                                            </div>
                                             <div class="ibox-content">
                                                 <div class="">
                                                 </div>
@@ -299,9 +298,10 @@
                 });
             })
         })
+
+
         //查看账单
         $('#Member').on('click','.user-dill-btn',function(){
-            console.log($(this));
             var id = $(this).attr('data-id');
             var url = '/admin/user/bill?id='+id;
             layer.open({
@@ -312,6 +312,34 @@
                 area: ['40%', '90%'],
                 content: url
             });
+        })
+
+        //扣除用户费用
+        $('.deduct-btn').on('click',function(){
+            var money = $('.deduct-input').val();
+            layui.use('layer', function() {
+                var url = "{:url('admin/admin_user/passAffirm')}";
+                layer.prompt({title: '输入密码，并确认',offset: ['30%', '45%']}, function (pass, index) {
+                    $.post(url,{
+                        password:pass
+                    },function(e){
+                        if(e.code == 1 ){
+                            layer.close(index);
+                            $.post('/admin/user/deductMoney',{
+                                money:money
+                            },function(v){
+
+                                layer.msg(v.msg);
+                                if(v.code == 1 ){
+                                    window.location.reload();
+                                }
+                            })
+                        }else{
+                            layer.msg(e.msg);
+                        }
+                    })
+                });
+            })
         })
     });
 </script>

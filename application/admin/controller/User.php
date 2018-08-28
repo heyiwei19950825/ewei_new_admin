@@ -51,6 +51,7 @@ class User extends AdminBase
      */
     public function index($keyword = '', $page = 1)
     {
+
         $map = [];
         if ($keyword) {
             $map['username|mobile|email'] = ['like', "%{$keyword}%"];
@@ -335,7 +336,7 @@ class User extends AdminBase
         if ($this->request->isPost()) {
             $params = $this->request->param();
             //type 判断是会员消费还是散客消费
-            $server = $u_id = $serverSPrice = $staffId = $performance = $staffNumber = $serverNumber = $isDiscount = $type  =0;
+            $server = $u_id = $serverSPrice = $staffId = $performance = $staffNumber = $serverNumber = $isDiscount = $type  = $performanceType = $performanceVal = $performanceRatio = 0;
             extract($params);
 
             if (empty($u_id) && $type == 0 ) {
@@ -433,6 +434,7 @@ class User extends AdminBase
 
                 //员工绩效
                 for ($i=$number;$i<$staffLength;$i++){
+
                     if($performance[$i] != 0  && $staffId[$i] != 0 &&   $staffId[$i] != '0'){
                         $tInfo = $this->technician_model->getInfo(['id'=>$staffId[$i],'s_id'=>$this->admin_id]);
                         if( empty($tInfo)){
@@ -446,8 +448,10 @@ class User extends AdminBase
                             's_o_price' => $newServerList[$v]['price'],
                             's_price' => $priceVal,
                             's_number' => $serverNumber[$k],
-                            'performance' => $params['money'],
-                            'performance_ratio' => $tInfo['performance']!= 0?intval(($params['money'] * $tInfo['performance'])/100):0,
+                            'performance' => $performance[$i],//业绩
+                            'performance_type' => $performanceType[$i],//提成类型
+                            'performance_ratio' => $performanceVal[$i],//提成
+                            'performance_val_ratio' =>$performanceRatio[$i],//提成值
                             'type'    => 0,
                             'time' => date('Y-m-d H:i:s',time()),
                             'shop_id' => $this->admin_id,
@@ -583,7 +587,7 @@ class User extends AdminBase
                         's_price' => $priceVal,
                         's_number' => $goodsNum[$k],
                         'performance' => $params['money'],
-                        'performance_ratio' => intval($performance*(int)$goodsNum[$k]),
+                        'performance_ratio' => round($performance*(int)$goodsNum[$k],1),
                         'type'    => 1,
                         'time' => date('Y-m-d H:i:s',time()),
                         'shop_id' => $this->admin_id,
@@ -754,6 +758,7 @@ class User extends AdminBase
                 }
                 if ($k > 1) {
                     $data[$k]['s_id'] = $this->admin_id;
+                    $data[$k]['uni_id'] = date('md').rand(100,999).$k;
                     $data[$k]['username'] = $v[0];
                     $data[$k]['sex'] = $v[1]=='男'?1:2;
                     $data[$k]['mobile'] = $v[2];
@@ -832,6 +837,30 @@ class User extends AdminBase
             }else{
                 return $this->error('网络异常');
             }
+        }
+    }
+
+    /**
+     * 批量扣除用户金额
+     */
+    public function deductMoney(){
+        if($this->request->isPost()){
+            $params = $this->request->param('money',0);
+            $money =( int)$params;
+
+            if( $money == 0 ) return $this->error('请输入扣除金额');
+            $row = Db::name('user')->where([
+                's_id'=>$this->admin_id,
+                'rank_id'=>['<>',0],
+                'balance' =>['<>',0]
+            ])->setDec('balance', $money);
+            if($row){
+                return $this->success('操作成功');
+            }else{
+                return $this->error('网络异常');
+            }
+        }else{
+            return $this->error('错误请求');
         }
     }
 

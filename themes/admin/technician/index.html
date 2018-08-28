@@ -63,11 +63,11 @@
                             <td><img src="{$vo.cover_pic}" alt="" style="width: 50px;"></td>
                             <td>{$vo.service}</td>
                             <td>{$vo.mobile}</td>
-                            <td class="performance_val">{$vo.performance}%</td>
+                            <td class="performance_val">{$vo.performance}{if $vo.performance_type == 1}%{else}元{/if}</td>
                             <td>{php}echo $vo['status']==1 ? '显示' : '隐藏';{/php}</td>
                             <td>{$vo.sort}</td>
                             <td class="center" style="width: 250px;" >
-                                <div class="btn btn-primary performance" data-toggle="modal" data-target="#performance" data-id="{$vo['id']}">提成设置</div>
+                                <div class="btn btn-primary performance-pop" data-toggle="modal" data-target="#performance" data-id="{$vo['id']}">提成设置</div>
                                 <a  class="btn btn-info" href="{:url('admin/technician/edit',['id'=>$vo['id']])}">编辑</a>
                                 <a  class="btn btn-danger" href="{:url('admin/technician/delete',['id'=>$vo['id']])}">删除</a>
                             </td>
@@ -91,8 +91,29 @@
             </div>
             <div class="modal-body">
                 <div class="input-group m-b royalty_type" style="">
-                    <input type="number" class="form-control" name="performance" value="0" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
-                    <span class="input-group-addon percentage" >% </span>
+                    提成方式选择:
+                    <label class="radio-inline">
+                        <input type="radio" name="performanceType" id="inlineRadio1" checked> 百分比
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="performanceType" id="inlineRadio2"> 固定
+                    </label>
+                    <input type="hidden" value="1" class="performanceType">
+                </div>
+
+                <div class="fixation"  style="display:none">
+                     固定提成：
+                    <div class="input-group m-b royalty_type">
+                        <input type="number" class="form-control" name="fixation_performance" value="0" >
+                        <span class="input-group-addon percentage">元</span>
+                    </div>
+                </div>
+                <div class="ratio">
+                    百分比提成：
+                    <div class="input-group m-b royalty_type">
+                        <input type="number" class="form-control" name="ratio_performance" value="0" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                        <span class="input-group-addon percentage">% </span>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -115,29 +136,47 @@
     $(document).ready(function () {
         $('#editable').dataTable();
 
+        //显示提成方式
+        $('#inlineRadio1').click(function(){
+            $('.ratio').css('display','block');
+            $('.fixation').css('display','none');
+            $('.performanceType').val(1);
+        })
+        $('#inlineRadio2').click(function(){
+            $('.ratio').css('display','none');
+            $('.fixation').css('display','block');
+
+            $('.performanceType').val(2);
+        })
+
         //提成弹窗
-        $('.performance').on('click',function(){
+        $('.performance-pop').on('click',function(){
             var id = $(this).attr('data-id');
+            $('.ratio').css('display','block');
+            $('.fixation').css('display','none');
+            $('.performanceType').val(1);
+            $('input[name=ratio_performance]').val(0);
+            $('input[name=fixation_performance]').val(0);
             $('.performance-btn').attr('data-id',id);
         })
 
         //提成设置
         $('.performance-btn').on('click',function(){
             var id = $(this).attr('data-id');
-            var performanceVal = $('input[name=performance]').val();
+            var performanceType = $('.performanceType').val();
+
+            if(performanceType == 1) {
+                var performanceVal = $('input[name=ratio_performance]').val();
+            }else{
+                var performanceVal = $('input[name=fixation_performance]').val();
+            }
             $.post('{:url("admin/technician/setPerformance")}',{
                 id:id,
+                performanceType:performanceType,
                 performanceVal:performanceVal
             },function(e){
                 layer.msg(e.msg);
-                if(e.code == 1){
-                    $('#performance').modal('hide');
-                }
-                $('.performance').each(function(i,v){
-                    if($(v).attr('data-id') == id ){
-                        $(v).parents('tr').find('.performance_val').text(performanceVal+'%');
-                    }
-                })
+               window.location.reload();
             })
         })
     });

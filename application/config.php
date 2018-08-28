@@ -170,6 +170,13 @@ return [
         'taglib_end'   => '}',
     ],
 
+    //错误模板
+    'http_exception_template'    =>
+        [
+            404 =>  ROOT_PATH.'themes/public/404.html',
+            501 =>  ROOT_PATH.'themes/public/501.html',
+        ],
+
     // 手机模板开启
     'mobile_theme'          => false,
 
@@ -198,7 +205,7 @@ return [
     // 显示错误信息
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
-    'exception_handle'       => '\app\lib\exception\ExceptionHandler',
+//    'exception_handle'       => '\app\lib\exception\ExceptionHandler',
 
 
     // +----------------------------------------------------------------------

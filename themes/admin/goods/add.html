@@ -89,28 +89,28 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><span>*</span> 提成</label>
                             <div class="col-sm-20" >
-                                <div class="radio i-checks"  style="display:inline;">
-                                    <label>
-                                        <input type="radio" value="0" name="royalty_type" checked="checked"> <i></i>提成模板</label>
-                                </div>
+                                <!--<div class="radio i-checks"  style="display:inline;">-->
+                                    <!--<label>-->
+                                        <!--<input type="radio" value="0" name="royalty_type" checked="checked"> <i></i>提成模板</label>-->
+                                <!--</div>-->
                                 <div class="radio i-checks" style="display:inline;">
                                     <label>
-                                        <input type="radio" value="1" name="royalty_type" > <i></i>固定</label>
+                                        <input type="radio" value="1" name="royalty_type" checked="checked"> <i></i>固定</label>
                                 </div>
                                 <div class="radio i-checks"  style="display:inline;">
                                     <label>
                                         <input type="radio" value="2" name="royalty_type" > <i></i>百分比</label>
                                 </div>
                             </div>
-                            <div class="col-sm-5" style="margin-top: 30px;">
-                                <div  class="input-group template" style="width:34vw;">
-                                <select class="form-control" name="royalty_template">
-                                    <option value="0">请选择</option>
-                                    {foreach name="royalty_template" item="vo"}
-                                    <option value="{$vo.id}">{$vo.name}</option>
-                                    {/foreach}
-                                </select>
-                            </div>
+                            <!--<div class="col-sm-5" style="margin-top: 30px;">-->
+                                <!--<div  class="input-group template" style="width:34vw;">-->
+                                <!--<select class="form-control" name="royalty_template">-->
+                                    <!--<option value="0">请选择</option>-->
+                                    <!--{foreach name="royalty_template" item="vo"}-->
+                                    <!--<option value="{$vo.id}">{$vo.name}</option>-->
+                                    <!--{/foreach}-->
+                                <!--</select>-->
+                            <!--</div>-->
                             <div class="input-group m-b royalty_type" style="display: none">
                                 <input type="number" class="form-control" name="royalty" value="">
                                 <span class="input-group-addon fixation" >元 </span>

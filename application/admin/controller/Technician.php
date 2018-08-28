@@ -38,14 +38,13 @@ class Technician extends AdminBase
     public function index($cid = 0)
     {
         $map   = [];
-        $field = 'id,name,c_id,status,sort,mobile,cover_pic,service,performance';
+        $field = 'id,name,c_id,status,sort,mobile,cover_pic,service,performance,performance_type';
         if ($cid > 0) {
             $map['cid'] =  $cid;
         }
         $map['s_id'] = $this->admin_id;
         $technician_list  = $this->technician_model->field($field)->where($map)->order(['sort' => 'DESC'])->select();
         $category_list = $this->technician_category_model->column('name', 'id');
-
         return $this->fetch('index', ['technician_list' => $technician_list,'category_list'=>$category_list,'cid' => $cid]);
     }
 
@@ -155,7 +154,7 @@ class Technician extends AdminBase
         $cObject = $this->technician_category_model->where(['s_id'=>$this->admin_id,'is_form'=>1])->field('id,name')->select();
         $row = [];
         foreach ($cObject as $k=>$v){
-            $technician = $this->technician_model->where(['s_id'=>$this->admin_id,'c_id'=>['in',$v['id']]])->field('id,name')->select();
+            $technician = $this->technician_model->where(['s_id'=>$this->admin_id,'c_id'=>['in',$v['id']]])->field('id,name,performance_type,performance')->select();
             $row[] = ['id'=>$v['id'],'name'=>$v['name'],'tList'=>$technician];
         }
         if( $row ){
@@ -212,7 +211,8 @@ class Technician extends AdminBase
         if($this->request->isPost()){
             $params = $this->request->param();
             $row = $this->technician_model->where(['id'=>$params['id']])->update([
-                'performance' => $params['performanceVal']
+                'performance' => $params['performanceVal'],
+                'performance_type' => $params['performanceType']
             ]);
             if($row){
                 return $this->success('设置成功');

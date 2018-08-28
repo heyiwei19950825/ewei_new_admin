@@ -50,7 +50,6 @@ class Shop extends AdminBase
     public function update(){
         if($this->request->isPost()){
             $params = $this->request->param();
-
             $data =[
                 "shop_logo" => $params['shop_logo'],
                 "shop_shopowner" => $params['shop_shopowner'],
@@ -61,7 +60,7 @@ class Shop extends AdminBase
                 "brief" => $params['brief'],
                 "content" => $params['content'],
                 "is_discount" => $params['is_discount'],
-                "note_config" => json_encode($params['note_config'])
+                "note_config" => isset($params['note_config'])?json_encode($params['note_config']):[]
             ];
             $book = [
                 'switch' => $params['switch'],

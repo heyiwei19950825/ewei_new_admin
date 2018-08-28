@@ -32,7 +32,7 @@
     </style>
 </head>
 <body style="background-color:#fff ">
-<div class="col-xs-7 main-left" style="min-width: 700px;">
+<div class="col-xs-9 main-left" style="min-width: 700px;">
     <div class="main-tab">
         <div class="tabs-container">
             <ul class="nav nav-tabs">
@@ -84,26 +84,26 @@
         <div class="tab-content">
             <!--<div id="tab-1" class="tab-pane active" style="display: none">-->
             <div id="tab-1" class="tab-pane active" style="display:block">
-                    <div class="panel-body">
+                <div class="panel-body">
                     <strong>
-                            <div class="tabs-container">
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#tab-14" aria-expanded="true"> 收银</a>
-                                    </li>
-                                    <li class=""><a data-toggle="tab" href="#tab-15" aria-expanded="false">充值</a>
-                                    </li>
-                                    <li class=""><a data-toggle="tab" href="#tab-16" aria-expanded="false">自定义收银</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </strong>
-                        <div class="tab-content">
-                            <div id="tab-14" class="tab-pane active">
-                                <form action="{:url('admin/user/deal')}" class="ajax-from" method="post">
-                                    <input type="hidden" value="0" class="user-id" name="u_id">
-                                    <input type="hidden" value="0" class="type" name="type">
-                                    <input type="hidden" name="staffNumber" value="0">
-                                    <div class="panel-body">
+                        <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-14" aria-expanded="true"> 收银</a>
+                                </li>
+                                <li class=""><a data-toggle="tab" href="#tab-15" aria-expanded="false">充值</a>
+                                </li>
+                                <li class=""><a data-toggle="tab" href="#tab-16" aria-expanded="false">自定义收银</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </strong>
+                    <div class="tab-content">
+                        <div id="tab-14" class="tab-pane active">
+                            <form action="{:url('admin/user/deal')}" class="ajax-from" method="post">
+                                <input type="hidden" value="0" class="user-id" name="u_id">
+                                <input type="hidden" value="0" class="type" name="type">
+                                <input type="hidden" name="staffNumber" value="0">
+                                <div class="panel-body">
                                     <table class="table table-striped table-bordered table-hover col-xs-12" style="display: table;">
                                         <thead>
                                         <tr class="odd" height="30px">
@@ -158,167 +158,167 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                </form>
-                                <form action="{:url('admin/user/goodsDeal')}" class="ajax-from" method="post">
+                            </form>
+                            <form action="{:url('admin/user/goodsDeal')}" class="ajax-from" method="post">
+                                <input type="hidden" value="0" class="user-id" name="u_id">
+                                <input type="hidden" value="0" class="type" name="type">
+                                <div class="panel-body">
+                                    <table class="table table-striped table-bordered table-hover col-xs-12" style="display: table;">
+                                        <thead>
+                                        <tr class="odd" height="30px">
+                                            <th scope="col"  rowspan="2" class="txal pdl10" >商品名称
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2" >原价
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2"  >数量
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2" >最终销售价格
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2" >推销员
+                                            </th>
+                                            <th scope="col" colspan="1" rowspan="2" style="" class="goods-table-option">操作
+                                            </th>
+                                        </tr>
+                                        <tr class="goods-odd-item" height="30px">
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="goods-data" data-id="0">
+                                            <input type="hidden" class="goods-tr" name="goods[]" >
+                                            <td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list"></td>
+                                            <td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td>
+                                            <td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
+                                            <td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
+                                            <td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td>
+                                            <td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>
+                                        </tr>
+                                        <tr class="goods-count">
+                                            <td colspan="1" height="60"><img src="__STATIC__/img/Add.png"  class="goods-stk" >
+                                            </td>
+                                            <td colspan="15" align="right" height="60" class="txar stk">
+                                                <div>
+                                                    折扣：<span class="txw1 r1 txs20 pdr20" id="goods_rank_discount">0</span>折
+                                                    <input type="hidden" name="goods_rank_discount" value="0">
+                                                </div>
+                                                <div>
+                                                    原价：<span class="txw1 r1 txs20 pdr20" id="goods_o_price">0</span>元
+                                                </div>
+                                                <div>
+                                                    优惠价格：<span class="txw1 r1 txs20 pdr20" id="goods_discount_price">-0</span>元
+                                                </div>
+                                                <div>
+                                                    项目实收：<span class="txw1 r1 txs20 pdr20" id="goods_zhsy_xm">0</span>元
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="16" align="right">
+                                                <span>备注：<input type="text" style="margin-right:50px;" name="remark"></span>
+                                                <span class="btn btn-primary submit-btn" data-type="1">收银结算</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="tab-15" class="tab-pane">
+                            <div class="panel-body">
+                                <form class="form-horizontal ajax-from" method="post" action="/admin/user/recharge.html">
                                     <input type="hidden" value="0" class="user-id" name="u_id">
-                                    <input type="hidden" value="0" class="type" name="type">
-                                    <div class="panel-body">
-                                        <table class="table table-striped table-bordered table-hover col-xs-12" style="display: table;">
-                                            <thead>
-                                            <tr class="odd" height="30px">
-                                                <th scope="col"  rowspan="2" class="txal pdl10" >商品名称
-                                                </th>
-                                                <th scope="col" colspan="1" rowspan="2" >原价
-                                                </th>
-                                                <th scope="col" colspan="1" rowspan="2"  >数量
-                                                </th>
-                                                <th scope="col" colspan="1" rowspan="2" >最终销售价格
-                                                </th>
-                                                <th scope="col" colspan="1" rowspan="2" >推销员
-                                                </th>
-                                                <th scope="col" colspan="1" rowspan="2" style="" class="goods-table-option">操作
-                                                </th>
-                                            </tr>
-                                            <tr class="goods-odd-item" height="30px">
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr class="goods-data" data-id="0">
-                                                <input type="hidden" class="goods-tr" name="goods[]" >
-                                                <td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list"></td>
-                                                <td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td>
-                                                <td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
-                                                <td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"></td>
-                                                <td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td>
-                                                <td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>
-                                            </tr>
-                                            <tr class="goods-count">
-                                                <td colspan="1" height="60"><img src="__STATIC__/img/Add.png"  class="goods-stk" >
-                                                </td>
-                                                <td colspan="15" align="right" height="60" class="txar stk">
-                                                    <div>
-                                                        折扣：<span class="txw1 r1 txs20 pdr20" id="goods_rank_discount">0</span>折
-                                                        <input type="hidden" name="goods_rank_discount" value="0">
-                                                    </div>
-                                                    <div>
-                                                        原价：<span class="txw1 r1 txs20 pdr20" id="goods_o_price">0</span>元
-                                                    </div>
-                                                    <div>
-                                                        优惠价格：<span class="txw1 r1 txs20 pdr20" id="goods_discount_price">-0</span>元
-                                                    </div>
-                                                    <div>
-                                                        项目实收：<span class="txw1 r1 txs20 pdr20" id="goods_zhsy_xm">0</span>元
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="16" align="right">
-                                                    <span>备注：<input type="text" style="margin-right:50px;" name="remark"></span>
-                                                    <span class="btn btn-primary submit-btn" data-type="1">收银结算</span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">充值金额</label>
+                                        <div class="col-sm-5">
+                                            <div class="input-group m-b">
+                                                <input type="number" class="form-control" name="money" value="0">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">赠送金额</label>
+                                        <div class="col-sm-5">
+                                            <div class="input-group m-b">
+                                                <input type="number" class="form-control" name="give_money" value="0">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">赠送积分</label>
+                                        <div class="col-sm-5">
+                                            <div class="input-group m-b">
+                                                <input type="number" class="form-control" name="give_integral" value="0">
+                                                <span class="input-group-addon">积分</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"> 备注</label>
+                                        <div class="col-sm-10">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <input type="text" class="form-control" name="remark">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"></label>
+                                        <div class="col-sm-10">
+                                            <div class="row">
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="btn btn-primary submits-btn-submits-btn" type="button">充值</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
-                            <div id="tab-15" class="tab-pane">
-                                <div class="panel-body">
-                                    <form class="form-horizontal ajax-from" method="post" action="/admin/user/recharge.html">
-                                        <input type="hidden" value="0" class="user-id" name="u_id">
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">充值金额</label>
-                                            <div class="col-sm-5">
-                                                <div class="input-group m-b">
-                                                    <input type="number" class="form-control" name="money" value="0">
-                                                    <span class="input-group-addon">元</span>
+                        </div>
+                        <div id="tab-16" class="tab-pane">
+                            <div class="panel-body">
+                                <form class="form-horizontal ajax-from" method="post" action="/admin/user/customize.html">
+                                    <input type="hidden" value="0" class="user-id" name="u_id">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">自定义消费金额</label>
+                                        <div class="col-sm-5">
+                                            <div class="input-group m-b">
+                                                <input type="number" class="form-control" name="money" value="0">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"> 备注</label>
+                                        <div class="col-sm-10">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <input type="text" class="form-control" name="remark">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">赠送金额</label>
-                                            <div class="col-sm-5">
-                                                <div class="input-group m-b">
-                                                    <input type="number" class="form-control" name="give_money" value="0">
-                                                    <span class="input-group-addon">元</span>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"></label>
+                                        <div class="col-sm-10">
+                                            <div class="row">
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="btn btn-primary submits-btn-submits-btn" type="button">确认消费</div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">赠送积分</label>
-                                            <div class="col-sm-5">
-                                                <div class="input-group m-b">
-                                                    <input type="number" class="form-control" name="give_integral" value="0">
-                                                    <span class="input-group-addon">积分</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"> 备注</label>
-                                            <div class="col-sm-10">
-                                                <div class="row">
-                                                    <div class="col-md-5">
-                                                        <input type="text" class="form-control" name="remark">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"></label>
-                                            <div class="col-sm-10">
-                                                <div class="row">
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="btn btn-primary submits-btn-submits-btn" type="button">充值</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="tab-16" class="tab-pane">
-                                <div class="panel-body">
-                                    <form class="form-horizontal ajax-from" method="post" action="/admin/user/customize.html">
-                                        <input type="hidden" value="0" class="user-id" name="u_id">
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">自定义消费金额</label>
-                                            <div class="col-sm-5">
-                                                <div class="input-group m-b">
-                                                    <input type="number" class="form-control" name="money" value="0">
-                                                    <span class="input-group-addon">元</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"> 备注</label>
-                                            <div class="col-sm-10">
-                                                <div class="row">
-                                                    <div class="col-md-5">
-                                                        <input type="text" class="form-control" name="remark">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"></label>
-                                            <div class="col-sm-10">
-                                                <div class="row">
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="btn btn-primary submits-btn-submits-btn" type="button">确认消费</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
+                    </div>
                 </div>
 
             </div>
@@ -541,7 +541,7 @@
     </div>
 </div>
 </div>
-<div class="col-xs-4 main-right" style="margin-top: 50px; min-width: 400px;">
+<div class="col-xs-3 main-right" style="margin-top: 50px; min-width: 400px;">
     <div class="form-group col-xs-9">
         <input type="text" placeholder="搜索 服务和商品信息" class="form-control search-goods" >
     </div>
@@ -576,7 +576,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">选取服务</h4>
+                <h4 class="modal-title">选取服务</h4>hhy19951120
             </div>
             <div class="modal-body">
                 <div class="panel-body">
@@ -735,7 +735,7 @@
             $('.main-right').css('display','block');
         })
         $('.member').on('click',function(){
-           window.location.reload();
+            window.location.reload();
         })
 
         //商品服务搜索事件
@@ -796,7 +796,7 @@
                     '<td><span class="goods-price"></span><input type="hidden" name="goodsPrice[]" class="goods-price-val"></td> ' +
                     '<td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]"></td> ' +
                     '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" ></td> ' +
-                    '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
+                    '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"  data-performance="0"  data-performance-type="1"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
                     '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td> ' +
                     '</tr>'
             $(activeTab).find('.goods-count').before(html);
@@ -865,9 +865,9 @@
         function selectGoods(){
             var goodsHtml = '';
             $(goodsData).each(function(i,v){
-                    goodsHtml +='<div class="col-sm-4 goods-info" data-name="'+v.name+'" data-price="'+v.sp_price+'" data-id="'+v.id+'"> <div class="panel panel-info"> <div class="panel-heading">'+v.name+' </div> <div class="panel-body" style="color:red">' +
-                            v.sp_price +'元'+
-                            ' </div> </div> </div>'
+                goodsHtml +='<div class="col-sm-4 goods-info" data-name="'+v.name+'" data-price="'+v.sp_price+'" data-id="'+v.id+'"> <div class="panel panel-info"> <div class="panel-heading">'+v.name+' </div> <div class="panel-body" style="color:red">' +
+                        v.sp_price +'元'+
+                        ' </div> </div> </div>'
             });
             $('.goods').html(goodsHtml);
             $('.goods-modal').html(goodsHtml);
@@ -895,13 +895,14 @@
                     var bgColor = new Array('yellow-bg','navy-bg','lazur-bg','red-bg');
                     $('input[name=staffNumber]').val(data.length);
                     $(data).each(function (i, v) {
-                        thHtml += '<th scope="col" colspan="2" class="txw1 staff-category" style="" data-id="' + v.id + '">' + v.name + '</th>';
-                        trHtml += '<td>工号</td><th scope="col" style="">业绩</th>';
-                        addHtml += '<td class="staff-select" data-type="0" data-toggle="modal" data-target="#staff" data-id="'+v.id+'"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
-                                '<td><input size="5" class="inp_sml_nolenth inp_c1 performance" type="text" name="performance[]"  value="0" ></td>'
+                        thHtml += '<th scope="col" colspan="3" class="txw1 staff-category" style="" data-id="' + v.id + '">' + v.name + '</th>';
+                        trHtml += '<th>工号</th><th scope="col" style="">业绩</th><th scope="col" style="">提成</th>';
+                        addHtml += '<td class="staff-select" data-type="0" data-toggle="modal" data-target="#staff" data-id="'+v.id+'"  data-performance="0"  data-performance-type="1"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
+                                '<td><input size="5" class="inp_sml_nolenth inp_c1 performance" type="text" name="performance[]"  value="0" ><input class="performance_ratio" name="performanceRatio[]" type="hidden" value="1"></td>'+
+                                '<td><input size="5" class="inp_sml_nolenth inp_c1 performance_val" type="text" name="performanceVal[]"  value="0" ><input class="performance_type" name="performanceType[]" type="hidden" value="1"></td>'
                         staffHtml += '<div class="staff-category-item"  data-id="'+v.id+'">'
                         $(v.tList).each(function(ti,tv){
-                            staffHtml += '<div class="col-sm-3 staff-item" data-id="'+tv.id+'" data-name="'+tv.name+'"> <div class="widget style1 '+bgColor[i]+'"> <div class="row vertical-align"> <div class="col-xs-3"> <i class="fa fa-user fa-3x"></i> </div> <div class="col-xs-9 text-right"><span class="font-bold col-xs-12">'+v.name+'</span> <span style="margin-top: 5px;" class="font-bold  col-xs-12">'+tv.name+'</span> </div> </div> </div> </div>'
+                            staffHtml += '<div class="col-sm-3 staff-item" data-performance="'+tv.performance+'" data-performance-type= "'+tv.performance_type+'" data-id="'+tv.id+'" data-name="'+tv.name+'"> <div class="widget style1 '+bgColor[i]+'"> <div class="row vertical-align"> <div class="col-xs-3"> <i class="fa fa-user fa-3x"></i> </div> <div class="col-xs-9 text-right"><span class="font-bold col-xs-12">'+v.name+'</span> <span style="margin-top: 5px;" class="font-bold  col-xs-12">'+tv.name+'</span> </div> </div> </div> </div>'
                         })
                         staffHtml += '</div>'
                     })
@@ -971,12 +972,14 @@
                         })
                     }
                 })
-            //服务
+                //服务
             }else if(type == 0 ){
                 var id = $(this).attr('data-id');
                 var tName = $(this).attr('data-name');
                 var selectId = $(this).parents('.staff').attr('data-select-id');
                 var trId = $(this).parents('.staff').attr('data-id');
+                var performance = $(this).attr('data-performance');
+                var performanceType = $(this).attr('data-performance-type');
                 //查询对应的tr数据
                 $('.server-data').each(function(i,v){
                     var price = $(v).find('.server-price-val').val();
@@ -1002,6 +1005,15 @@
                                     }
                                 }
                                 $(sv).next().find('.performance').val(sum);
+                                $(sv).next().find('.performance_ratio').val(performance);
+                                if(performanceType == 1 ){
+                                    var  performanceVal= (sum * performance) /100;
+                                    performanceVal = performanceVal.toFixed(1)
+                                }else{
+                                    var performanceVal = performance;
+                                }
+                                $(sv).next().next().find('.performance_val').val(performanceVal);
+                                $(sv).next().next().find('.performance_type').val(performanceType);
                             }
                         })
                     }
@@ -1071,14 +1083,14 @@
             var price = $(this).attr('data-price');
             var trId = $('.goods-data').length;
             var trHtml =  ' <tr class="goods-data"  data-id="'+trId+'"> ' +
-                   ' <input type="hidden" class="goods-tr" name="goods[]" value="'+id+'"> ' +
+                    ' <input type="hidden" class="goods-tr" name="goods[]" value="'+id+'"> ' +
                     '<td class="select-goods goods-name" data-id="0"  data-toggle="modal" data-target="#goods-list">'+name+'</td> ' +
                     '<td><span class="goods-price">'+price+'</span><input type="hidden" name="goodsPrice[]" class="goods-price-val" value="'+price+'"></td> ' +
                     '<td><input size="2" class="inp_sml_nolenth goods-num" type="number" value="1" name="goodsNum[]"></td> ' +
                     '<td><input size="5" class="inp_sml_nolenth goods-s-price" value="0"  type="number" name="goodsSPrice[]" ></td> ' +
                     '<td class="staff-select" data-type="1" data-toggle="modal" data-target="#staff" data-id="0"><span class="staff-id"><button type="button" class="btn btn-primary btn-xs">选择员工</button></span><input type="hidden" name="staffId[]" class="staff-id-val" value="0"></td> ' +
                     '<td  class="goods-del-tr" style="" align="center"><a href="#" class="goods-rvbtn"><img src="__STATIC__/img/btn_remove.png"></a></td>'
-                    '</tr>'
+            '</tr>'
             //判断是否是拟态窗中选择服务信息
             if( $(this).parent().hasClass('goods-modal') ){
                 var dataId = $('.goods-modal').attr('data-id');
